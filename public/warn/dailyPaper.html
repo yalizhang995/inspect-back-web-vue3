@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网站监测日报</title>
+    <script src="https://cdn.tailwindcss.com/3.3.3"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <!-- 引入 Element UI 样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+     <!-- 引入 Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <!-- 引入 Element UI JS -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 引入ECharts CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        #app{
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            /* display: flex;
+            flex-direction: column; */
+            height: 100vh;
+            overflow-x: hidden;
+            background: #f7f9fb;
+            
+        }
+        .main{
+            /* flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;  */
+            background: #f7f9fb;
+            padding: 10px 18px;
+            margin-top: 110px;
+        }
+        .topBox{
+            position: relative;
+        }
+        .title{
+            position: absolute;
+            top: 120px;
+            padding: 0 40px;
+            font-size: 15px;
+        }
+        .sp{
+            color: red;
+            margin: 0 3px;
+        }
+        .sp1{
+            display: block;
+            margin-bottom: 6px;
+        }
+        .topImg{
+            height: 157px;
+        }
+        .webInfo{
+            /* width: 100%; */
+            margin: 0 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            padding-top: 15px;
+            position: absolute;
+            width: 91%;
+            top: 130px;
+        }
+        /* 首页更新 */
+        .homePage{
+            width: 100%;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            /* margin-top: 15px; */
+        }
+        .wbP{
+            line-height: 32px;
+        }
+        .sygxBox{
+            display: flex;
+            justify-content: space-between;
+        }
+        .dt{
+            font-size: 28px;
+            font-weight: 500;
+            text-align: center;
+        }
+        .dd{
+            font-size: 12px;
+            color: #747474;
+        }
+        /* 错敏信息 */
+        .wrongWords{
+            width: 100%;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            padding-top: 15px;
+        }
+        .tit{
+            height: 30px;
+            line-height: 30px;
+            font-size: 15px;
+            color: #303133;
+            font-weight: 500;
+        }
+        .titSp{
+            font-size: 12px;
+            color: #FA324D;
+            background: rgba(250,50,77,.2);
+            border-radius: 20px;
+            padding: 3px 5px;
+            margin-left: 5px;
+        }
+        .dsp1{
+            font-size: 26px;
+            color: #000000;
+        }
+        .dsp2{
+            font-size: 12px;
+            color: #747474;
+            margin-left: 5px;
+        }
+        .ms{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .li1{
+            display: flex;
+            align-items: center;
+        }
+        .lisp,.lisp2,.lisp3{
+            display: block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #FA324D;
+            margin-right: 10px;
+        }
+        .lisp2{
+            background: #F1BA1B;
+        }
+        .lisp3{
+            background: #325EE8;
+        }
+        .li2{
+            font-size: 12px;
+            color: #747474;
+            margin-left: 13px;
+            margin-top: 5px;
+        }
+        .li3{
+            margin-left: 13px;
+        }
+        .lissp,.lissp2,.lissp3{
+            display: inline-block;
+            padding: 2px 4px;
+            color: #FA324D;
+            border-radius: 5px;
+            background: rgba(250,50,77,.2);
+            font-size: 12px;
+        }
+        .lissp2{
+            color: #F1BA1B;
+            background: rgba(241,186,27,.2);
+        }
+        .lissp3{
+            color: #325EE8;
+            background: rgba(50,94,232,.2);
+        }
+        .bfb{
+            width: 100%;
+            height: 10px;
+            border-radius: 10px;
+            background: #efefef;
+            display: flex;
+            margin-top: 10px;
+            
+        }
+        .spsp1{
+            display: block;
+            width: 40%;
+            height: 100%;
+            background: #FA324D;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+        .spsp2{
+            display: block;
+            width: 20%;
+            height: 100%;
+            background: #F1BA1B;
+            border-radius: 0;
+        }
+        .spsp3{
+            display: block;
+            width: 40%;
+            height: 100%;
+            background: #325EE8;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .spsp1Class{
+            border-top-right-radius: 10px!important;
+            border-bottom-right-radius: 10px!important;
+        }
+        .spsp2Class{
+            border-radius: 10px!important;
+        }
+        .spsp2Class1{
+            border-top-left-radius: 10px!important;
+            border-bottom-left-radius: 10px!important;
+        }
+        .spsp2Class2{
+            border-top-right-radius: 10px!important;
+            border-bottom-right-radius: 10px!important;
+        }
+        .spsp3Class{
+            border-top-left-radius: 10px!important;
+            border-bottom-left-radius: 10px!important;
+        }
+        /* 栏目更新 */
+        .homeConnectivity,.homeConnectivity2{
+            width: 100%;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            padding-top: 15px;
+            margin-top: 15px;
+            position: relative;
+            padding-bottom: 0;
+        }
+        .homeConnectivity2{
+            padding-bottom: 20px;
+        }
+        .zzdwBox{
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0 15px 0;
+        }
+        .zzdwDl{
+            background: #f2f7fe;
+            border-radius: 5px;
+            padding: 3px 10px;
+        }
+        .zzdwDt{
+            text-align: center;
+            font-weight: 500;
+            font-size: 20px;
+        }   
+        .zzdwDd{
+            font-size: 12px;
+        }
+        /* 首页连通 */
+        .syltBox{
+            width: 100%;
+            height: 240px;
+            margin-top: 25px;
+        }
+        .ltBox{
+            position: absolute;
+            top: 50px;
+            display: flex;
+            width: 94%;
+        }
+        .ltBoxDl{
+            width: 50%;
+        }
+        .ltBoxDt{
+            font-size: 24px;
+            font-weight: 500;
+        }
+        .ltBoxDd{
+            font-size: 12px;
+            color: #747474;
+            margin-top: -4px;
+        }
+        .ltBoxDdSp{
+            color: red;
+            margin-left: 5px;
+        }
+        
+        .el-table_1_column_1,.el-table_1_column_2{
+            font-weight: normal;
+            color: #000000;
+        }
+        /* 取消当前行高亮 */
+        .el-table__body tr.current-row>td {
+            background-color: initial !important;
+        }
+
+        /* 取消悬停效果 */
+        .el-table__body tr:hover>td {
+            background-color: initial !important;
+        }
+        
+        .wlDiv{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .cDl{
+            width: 30%;
+            background: #F2F6FC;
+            padding: 5px 0 ;
+            text-align: center;
+            border-radius: 5px;
+        }
+        .cDt{
+            font-size: 22px;
+        }
+        .cDd{
+            font-size: 12px;
+            color: #747474;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- 移动端 -->
+        <!-- 顶部 -->
+        <div class="topBox">
+            <img src="../images/warn/wz.png" alt="" style="width:100%" class="topImg">
+            <!-- 网页信息 -->
+            <div class="webInfo">
+                <p class="wbP">网站名称：{{dateList.siteName}}</p>
+                <p class="wbP">网站标识码：{{dateList.siteCode}}</p>
+                <p class="wbP">日报日期：{{dateList.findDate}}</p>
+            </div>
+        </div>
+            
+        <!-- 内容区 -->
+        <div class="main">
+            
+            <!-- 首页更新 -->
+            <div class="homePage">
+                <div class="tit">首页更新</div>
+                <div class="sygxBox">
+                    <dl>
+                        <dt class="dt">{{formatToScientificNotation(dateList.infoTotal)}}</dt>
+                        <dd class="dd">网站总数</dd>
+                    </dl>
+                    <dl>
+                        <dt class="dt" style="color: #325EE8;">{{formatToScientificNotation(dateList.normalCount)}}</dt>
+                        <dd class="dd">正常更新</dd>
+                    </dl>
+                    <dl>
+                        <dt class="dt" style="color: #F1BA1B;">{{formatToScientificNotation(dateList.comingSoonCount)}}</dt>
+                        <dd class="dd">即将逾期</dd>
+                    </dl>
+                    <dl>
+                        <dt class="dt" style="color: #FA324D;">{{formatToScientificNotation(dateList.seriousCount)}}</dt>
+                        <dd class="dd">严重逾期</dd>
+                    </dl>
+                </div>
+            </div>
+            <!-- 错敏信息 -->
+            <div class="wrongWords">
+                <div class="tit">错敏隐私<span class="titSp">待整改：{{dateList.wordWaitCount}}</span></div>
+                <div class="ccc">
+                    <div class="div">
+                        <span class="dsp1">{{formatToScientificNotation(dateList.wordTotal)}}</span>
+                        <span class="dsp2">总数</span>
+                    </div>
+                    <div class="bfb">
+                        <span class="spsp1" ref="sp1" :style="{ width: dateList.wordSeriousLevelPropBFB}"></span>
+                        <span class='spsp2' ref="sp2" :style="{ width: dateList.wordGeneralLevelPropBFB}"></span>
+                        <span class='spsp3' ref="sp3" :style="{ width: dateList.wordSlightLevelPropBFB}"></span>
+                    </div>
+                    <div class="ms">
+                        <ul class="ul1">
+                            <li class="li1"><span class="lisp"></span>{{formatToScientificNotation(dateList.wordSeriousCount)}}</li>
+                            <li class="li2">严重</li>
+                            <li class="li3">
+                                <span class="lissp">{{dateList.wordSeriousLevelPropBFB}}</span>
+                            </li>
+                        </ul>
+                        <ul class="ul2">
+                            <li class="li1"><span class="lisp2"></span>{{formatToScientificNotation(dateList.wordGeneralCount)}}</li>
+                            <li class="li2">一般</li>
+                            <li class="li3">
+                                <span class="lissp2">{{dateList.wordGeneralLevelPropBFB}}</span>
+                            </li>
+                        </ul>
+                        <ul class="ul3">
+                            <li class="li1"><span class="lisp3"></span>{{formatToScientificNotation(dateList.wordSlightCount)}}</li>
+                            <li class="li2">轻微</li>
+                            <li class="li3">
+                                <span class="lissp3">{{dateList.wordSlightLevelPropBFB}}</span>                                
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- 外链错链 -->
+            <div class="wrongWords">
+                <div class="tit">外链错链<span class="titSp">待整改：{{dateList.linksTotal}}</span></div>
+                <div class="wlDiv">
+                    <dl class="cDl">
+                        <dt class="cDt">{{formatToScientificNotation(dateList.suspiciousCount)}}</dt>
+                        <dd class="cDd">可疑外链</dd>
+                    </dl>
+                    <dl class="cDl">
+                        <dt class="cDt">{{formatToScientificNotation(dateList.outWrongCount)}}</dt>
+                        <dd class="cDd">站外错链</dd>
+                    </dl>
+                    <dl class="cDl">
+                        <dt class="cDt">{{formatToScientificNotation(dateList.inWrongCount)}}</dt>
+                        <dd class="cDd">站内错链</dd>
+                    </dl>
+                </div>
+            </div>
+            <!-- 首页连通-组织单位 -->
+            <div class="homeConnectivity2" v-if="dateList.customerType == 1">
+                <div class="tit">首页连通</div>
+                <div class="zzdwBox">
+                    <dl class="zzdwDl">
+                        <dt class="zzdwDt">{{formatToScientificNotation(dateList.organizationReport.countNum)}}</dt>
+                        <dd class="zzdwDd">监测网站总数</dd>
+                    </dl>
+                    <dl class="zzdwDl" style="color: red">
+                        <dt class="zzdwDt">{{formatToScientificNotation(dateList.organizationReport.gteCountNum)}}</dt>
+                        <dd class="zzdwDd">不连通率≥5%</dd>
+                    </dl>
+                    <dl class="zzdwDl" style="color:#7dc54e">
+                        <dt class="zzdwDt">{{formatToScientificNotation(dateList.organizationReport.ltCountNum)}}</dt>
+                        <dd class="zzdwDd">连通率<span><</span>5%</dd>
+                    </dl>
+                </div>
+                <el-table :data="tableData" border style="width: 100%" size="mini" :highlight-current-row="false">
+                    <el-table-column prop="siteName" label="网站名称" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="confirmProportionVal" label="确定不连通占比Top10" align="right" width="140"></el-table-column>
+                </el-table>
+            </div>
+            <!-- 首页连通-填报单位 -->
+            <div class="homeConnectivity" v-if="dateList.customerType == 2">
+                <div class="tit">首页连通</div>
+                <div class="syltBox" id="syltBoxId"></div>
+                <div class="ltBox">
+                    <dl class="ltBoxDl">
+                        <dt class="ltBoxDt">{{formatToScientificNotation(dateList.confirmSum)}}</dt>
+                        <dd class="ltBoxDd">确定不连通次数<span class="ltBoxDdSp">{{dateList.confirmProportionVal}}%</span></dd>
+                    </dl>
+                    <dl class="ltBoxDl">
+                        <dt class="ltBoxDt">{{formatToScientificNotation(dateList.suspectedSum)}}</dt>
+                        <dd class="ltBoxDd">疑似不连通次数<span class="ltBoxDdSp">{{dateList.suspectedProportionVal}}%</span></dd>
+                    </dl>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+    <script>
+        // 创建Vue实例
+        new Vue({
+            el: '#app',
+            data: {
+                dateList: [],
+                tableData: [],
+            },
+            created () {
+                this.fetchData();
+            },
+            mounted() {
+                
+            },
+            methods: {
+                 // 数字科学计数法
+                formatToScientificNotation(value) {
+                    return value > 1000 ? value.toLocaleString() : value;
+                },
+                // 获取data参数
+                getQueryParam(param) {
+                    var regex = new RegExp('[?&]' + param + '(=([^&#]*)|&|#|$)');
+                    var results = regex.exec(window.location.href);
+                    if (!results) return null;
+                    if (!results[2]) return '';
+                    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+                },
+                /** 源数据*/
+                async fetchData() {
+                    let ym = null;
+                    ym = 'http://t-inspect-1.zh-hongyu.cn:80';
+                    // ym = 'http://back.puchayun.com.cn';
+                    // ym = window.location.protocol+window.location.host;
+                    try {
+                        var data = {
+                            // "searchId":"6VvIWdUm"
+                            "searchId": this.getQueryParam('id')
+
+                        }
+                        // const res = await fetch('http://192.168.0.4:8081/apiSnap/correction/location', {
+                        const res = await fetch('/biz/warnPageDetail/reportList', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        if (!res.ok) {}
+                        const httpDate = await res.json();
+                        this.dateList = httpDate.data;
+                        this.dateList.wordSeriousLevelPropBFB = this.dateList.wordSeriousLevelProp+'%';
+                        this.dateList.wordGeneralLevelPropBFB = this.dateList.wordGeneralLevelProp+'%';
+                        this.dateList.wordSlightLevelPropBFB = this.dateList.wordSlightLevelProp+'%';
+                        // 严重
+                        if(this.dateList.wordSeriousLevelProp > 0 && this.dateList.wordGeneralLevelProp == 0 && this.dateList.wordSlightLevelProp == 0){
+                            this.$refs.sp1.classList.add('spsp1Class');
+                        }else{
+                            this.$refs.sp1.classList.remove('spsp1Class');
+                        }
+                        // 一般
+                        if(this.dateList.wordGeneralLevelProp > 0 ){
+                            if(this.dateList.wordSeriousLevelProp == 0 && this.dateList.wordSlightLevelProp == 0){
+                                this.$refs.sp2.classList.add('spsp2Class');
+                            }else if(this.dateList.wordSeriousLevelProp == 0 && this.dateList.wordSlightLevelProp > 0){
+                                this.$refs.sp2.classList.add('spsp2Class1');
+                            }else if(this.dateList.wordSeriousLevelProp > 0 && this.dateList.wordSlightLevelProp == 0){
+                                this.$refs.sp2.classList.add('spsp2Class2');
+                            }else{
+                                this.$refs.sp2.classList.remove('spsp2Class2');
+                            }
+                        }else{
+                            this.$refs.sp2.classList.remove('spsp2Class2');
+                        }
+                        // 轻微
+                        if(this.dateList.wordSlightLevelProp > 0 && this.dateList.wordGeneralLevelProp == 0 && this.dateList.wordSeriousLevelProp == 0){
+                            this.$refs.sp3.classList.add('spsp3Class');
+                        }else{
+                            this.$refs.sp3.classList.remove('spsp3Class');
+                        }
+                        /** 组织单位*/
+                        if(this.dateList.customerType == 1){
+                            this.tableData = this.dateList.organizationReport.linksSummaryList; 
+                        }
+                        /** 填报单位*/
+                        let data1 = [];
+                        let data2 = [];
+                        data1 = this.dateList.unitReportList.map(item => item.confirmSum);
+                        data2 = this.dateList.unitReportList.map(item => item.suspectedSum);
+                        data3 = this.dateList.unitReportList.map(item => item.time.split(" ")[1].substring(0, 5))
+                        console.log(data3)
+                        setTimeout(()=>{
+                            /** 首页连通*/
+                            let chartDom = document.getElementById("syltBoxId");
+                            console.log(chartDom,'chartDom')
+                            let myChart = echarts.init(chartDom, null, {renderer: 'svg'});
+                            let option;
+                            option = {
+                                xAxis: {
+                                    type: 'category',
+                                    // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                                    data: data3,
+                                    axisLabel: {
+                                        rotate: 45,  // 旋转角度（正数表示逆时针旋转）
+                                        margin: 15,  // 标签与轴线之间的距离
+                                        align: 'right',  // 文字对齐方式
+                                        verticalAlign: 'top'  // 文字垂直对齐方式
+                                    }
+                                },
+                                yAxis: {
+                                    type: 'value'
+                                },
+                                series: [
+                                    {
+                                        // data: [820, 932, 901, 934, 1290, 1330, 1320],
+                                        data: data1,
+                                        type: 'line',
+                                        smooth: true,
+                                    },
+                                    {
+                                        // data: [220, 432, 601, 334, 1190, 1030, 720],
+                                        data: data2,
+                                        type: 'line',
+                                        smooth: true
+                                    }
+                                ]
+                            };
+                            console.log(option,'option')
+                            option && myChart.setOption(option);
+                        },100)
+
+
+                    } catch (error) {
+                        this.loading = false;
+                    }
+                },
+            },
+        
+        });
+    </script>
+</body>
+</html>

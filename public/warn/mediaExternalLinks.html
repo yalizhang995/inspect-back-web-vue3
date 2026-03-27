@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可疑外链</title>
+    <script src="https://cdn.tailwindcss.com/3.3.3"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.15.6/lib/theme-chalk/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.4.11/lib/index.js"></script>
+    <style>
+        #app{
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .main{
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* 在iOS上启用平滑滚动 */
+        }
+        ul{
+            margin-bottom: 20px;
+        }
+        li{
+            background: #ffffff;
+            padding-top: 10px;
+            margin-top: 15px;
+        }
+        .d1{
+            color: #606266;
+            margin: 5px 0;
+            padding: 0 15px;
+            display: flex;
+        }
+        .d2{
+            color: #606266;
+            margin: 5px 0;
+            padding: 0 15px;
+            display: flex;
+            display: flex;
+            align-items: center;
+        }
+        .y{
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 100%;
+            background: #409EFF;
+            margin-right: 8px;
+        }
+        .d3{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            margin-top: -10px;
+            color: #606266;
+        }
+        .icon{
+            width: 24px;
+            margin-right: 5px;
+        }
+        .sl{
+            display: inline-block;
+            min-width: 80px;
+        }
+        .sl2{
+            display: inline-block;
+            min-width: 80px;
+        }
+        .sr{
+            white-space: nowrap;       /* 防止文本换行 */
+            overflow: hidden;          /* 隐藏溢出的内容 */
+            text-overflow: ellipsis;  /* 显示省略符号来代表被修剪的文本 */
+            color: #1890ff;
+            cursor: pointer;
+        }
+        .cbz{
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+        }
+        .cbzsp1{
+            display: block;
+            width: 40%;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2; /* 限制文本显示为2行 */
+            overflow: hidden;
+        }
+        .cbzsp2{
+            display: block;
+            flex: 1;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2; /* 限制文本显示为2行 */
+            overflow: hidden;
+        }
+        .jt{
+            width: 25px;
+            margin: 0 20px;
+        }
+        .d3l{
+            flex: 1;
+            display: flex;
+            align-items: center;
+            
+        }
+        .d3ls{
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1; /* 限制文本显示为2行 */
+            overflow: hidden;
+            font-size: 15px;
+        }
+        .d3r{
+            width: 40%;
+            justify-content: right;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        .icon2{
+            width: 15px;
+            margin-right: 2px;
+        }
+        .d3rBox{
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+        .d3rBox2{
+            display: flex;
+            align-items: center;
+        }
+        .topBox{
+            position: relative;
+        }
+        .title{
+            position: absolute;
+            top: 120px;
+            padding: 0 40px;
+            font-size: 15px;
+        }
+        .sp{
+            color: red;
+            margin: 0 3px;
+        }
+        .sp1{
+            display: block;
+            margin-bottom: 6px;
+        }
+        .topImg{
+            height: 225px;
+        }
+        .wz{
+            display: inline-block;
+            width: 60px;
+        }
+        .kz{
+            display: inline-block;
+            width: 50px;
+        }
+
+        /* PC端 */
+        .pcTop{
+            width: 100%;
+            /* height: 200px; */
+            background: #4680f9;
+            padding-top: 10px;
+        }
+        .pcTopT{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 56px;
+            padding: 0 20px;
+            border-bottom: 1px solid #DCDFE6;
+        }
+        .titTxt{
+            font-size: 20px;
+            color: #ffffff;
+        }
+        .dcBtn{
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        /* .dcBtn:hover{
+            border: 2px solid #4680f9;
+            color: #4680f9;
+        } */
+        .dcIco{
+            margin-right: 3px;
+        }
+        .pcMain{
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .pcMainT{
+            width: 100%;
+            height: 70px;
+            background: #4680f9;
+            position: absolute;
+            top: 0;
+        }
+        .pcMainC{
+            background: #ffffff;
+            width: 96%;
+            flex: 1;
+            overflow: auto;
+            /* position: relative;
+            top: -40px; */
+            border-radius: 5px;
+            z-index: 10;
+            margin: 20px 0;
+            margin-left: 2%;
+            padding: 20px;
+        }
+        .el-table{
+            font-size: 16px;
+        }
+        .is-leaf{
+            text-align: left;
+        }
+        .el-table_1_column_1,.el-table_1_column_10{
+            text-align: center;
+        }
+        .el-table__header-wrapper{
+            height: 36px;
+        }
+        .cell{
+            font-size: 16px;
+            color: #000000;
+        }
+        .el-table__row{
+            height: 60px;
+        }
+        .dz{
+            color: #1890ff;
+            cursor: pointer;
+        }
+        .yImg{
+            width: 30px;
+            height: 30px;
+            border-radius: 100%;
+        }
+        .d22{
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            margin: 5px 0;
+        }
+        .acImg{
+            width: 23px;
+            height: 23px;
+            border-radius: 100%;
+            margin-right: 3px;
+        }
+        .tabHDiv{
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- 移动端 -->
+        <!-- <div v-if="isMobileType == 2"> -->
+            <!-- 顶部 -->
+            <div class="topBox" v-if="isMobileType == 2">
+                <img src="../images/warn/topImg2.png" alt="" style="width:100%" class="topImg">
+                <div class="title">
+                    <span class="sp1">尊敬的客户，您好！</span>
+                    <span>【普查云监管】发现存在<span class="sp">{{total}}</span>条<span class="sp">可疑外链</span>问题，请及时处理。</span>
+                </div>
+            </div>
+                
+            <!-- 内容区 -->
+            <div class="main" v-if="isMobileType == 2" @scroll="handleScroll" ref="scrollContainer">
+                <ul>
+                    <li v-for="(item,index) in dateList" :key="index" @click="goInfo(item)">
+                        <div class="d22">
+                            <img :src="item.appTypeImg" alt="" class="acImg">
+                            <span>{{item.accountName}}</span>
+                        </div>
+                        <!-- <div class="d2">
+                            <span class="y"></span>
+                            <span>{{item.siteName}}</span>
+                        </div> -->
+                        <div class="d2">
+                            <span>{{item.type}}</span>
+                        </div>
+                        <div class="d2">
+                            <span class="sl">资源类型：</span>
+                            <span>{{item.contentTypeText}}</span>
+                        </div>
+                        <div class="d2">
+                            <span class="sl2">外链链接：</span>
+                            <span class="sr" @click.stop="dzChange(item.url)">{{item.url}}</span>
+                        </div>
+                        
+                        <div class="d3">
+                            <span>{{item.auditTime}}</span>
+                            <!-- <div class="d3rBox2">
+                                <span><img src="../images/warn/kz.png" alt="" class="icon2"></span>
+                                <span @click.stop="dzChange(item.snapshotPath)" class="kz">快照</span>
+                            </div> -->
+                        </div>
+                        
+                    </li>
+                </ul>
+            </div>
+        <!-- </div> -->
+        <!-- PC端 -->
+        <!-- <div v-if="isMobileType == 1"> -->
+            <div class="pcTop" v-if="isMobileType == 1">
+                <div class="pcTopT">
+                    <div class="titTxt">普查云监管</div>
+                    <div class="dcBtn" @click="ecportChange">
+                        <i class="el-icon-bottom dcIco"></i>
+                        <span>全部导出</span>
+                    </div>
+                </div>
+            </div>
+            <div class="pcMain" v-if="isMobileType == 1">
+                <div class="pcMainC" @scroll="handleScrollPC" ref="container">
+                    <el-table
+                        :data="dateList"
+                    >   
+                        <el-table-column prop="index" label="序号" width="60" ></el-table-column>
+                        <el-table-column label="账号名称"  prop="accountName" min-width="220">
+                            <template slot-scope="scope">
+                                <div class="tabHDiv">
+                                    <img :src="scope.row.appTypeImg" alt="" class="acImg">
+                                    <span>{{ scope.row.accountName }}</span>
+                                </div>
+                            </template>
+                        </el-table-column>
+                        <!-- <el-table-column label="网站名称"  prop="siteName" min-width="220" show-overflow-tooltip></el-table-column> -->
+                        <el-table-column label="新媒体标识码"  prop="siteCodeMedia" min-width="220" show-overflow-tooltip></el-table-column>
+                        <el-table-column label="外链类型"  prop="type" min-width="120" show-overflow-tooltip></el-table-column>
+                        <el-table-column label="外链地址"  prop="url" min-width="240" show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <span class="dz" @click="dzChange2(scope.row.ul)">{{ scope.row.ul}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="域名"  prop="domain" min-width="200" show-overflow-tooltip></el-table-column>
+                        <!-- <el-table-column label="快照"  prop="snapshotPath" min-width="80" show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <el-button icon="el-icon-camera-solid" type="text" :disabled="!scope.row.snapshotPath" style="font-size:20px" @click="dzChange2(scope.row.snapshotPath)"></el-button>
+                            </template>
+                        </el-table-column> -->
+
+                        <el-table-column prop="fromTitle" label="父页面标题" width="280" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="fromUrl" label="父页面地址" width="280" show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <span class="dz" @click="dzChange(scope.row.fromUrl)">{{ scope.row.fromUrl}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="发现时间"  prop="auditTime" min-width="200" show-overflow-tooltip></el-table-column>
+                        <!-- <el-table-column label="链接位置"  prop="locationText" min-width="200" show-overflow-tooltip></el-table-column> -->
+                        <el-table-column label="资源类型"  prop="contentTypeText" min-width="120" show-overflow-tooltip></el-table-column>
+                    </el-table>
+                </div>
+                <div class="pcMainT"></div>
+            </div>
+        <!-- </div> -->
+    </div>
+    <script>
+        // 创建Vue实例
+        new Vue({
+            el: '#app',
+            data: {
+                dateList: [],
+                title: null,
+                isMobileType: null, // 1.pc端 2.移动端H5
+                pgNum: 1,
+                total: 0,
+                hasTriggered: false // 防止重复触发
+                
+            },
+            created () {
+                // 使用
+                if (this.isMobile()) {
+                    console.log('这是移动设备');
+                    this.isMobileType = 2;
+                    this.fetchData(1,10);
+                } else {
+                    console.log('这是PC端');
+                    this.isMobileType = 1;
+                    this.fetchData(1,20);
+                }
+            },
+            mounted() {
+                
+            },
+            methods: {
+                handleScroll() {
+                    const container = this.$refs.scrollContainer;
+                    const scrollHeight = container.scrollHeight;
+                    const scrollTop = container.scrollTop;
+                    const clientHeight = container.clientHeight;
+                    // 判断是否滚动到底部
+                    if (scrollTop + clientHeight >= scrollHeight - 10) { // 10是缓冲值
+                        console.log(this.dateList.length)
+                        console.log(this.total)
+                        if(this.dateList.length < this.total){
+                            this.pgNum++;
+                            console.log(this.pgNum)
+                            this.fetchData(this.pgNum,10)
+                        }
+                        
+                    }
+                },
+                handleScrollPC(){
+                    const container = this.$refs.container;
+                    // 判断是否滚动到底部
+                    const isBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 10;
+                    console.log(isBottom,'123')
+                    if(isBottom && !this.hasTriggered){
+                        console.log(this.dateList,'asdasdasdas')
+                        if(this.dateList.length < this.total){
+                            this.pgNum++;
+                            console.log(this.pgNum)
+                            this.fetchData(this.pgNum,20)
+                            this.hasTriggered = true;
+                            // .5秒后允许再次触发
+                            setTimeout(() => {
+                                this.hasTriggered = false;
+                            }, 500);
+                        }
+                        
+                    }
+                    
+                },
+                isMobile() {
+                    const userAgent = navigator.userAgent.toLowerCase();
+                    return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+                },
+                // 地址超链接
+                dzChange(url){
+                    if(url != null){
+                        window.location.href = url;
+                    }
+                },
+                // 地址超链接
+                dzChange2(url){
+                    if(url != null){
+                        window.open(url);
+                    }
+                },
+                // 详情
+                goInfo(item){
+                    // window.location.href = 'file:///Users/wangchao/Desktop/s/inspect-back-web/public/warn/externalLinksInfo.html?id='+item.wrongId;
+                    window.location.href = '/warn/mediaExternalLinksInfo.html?id='+item.wrongId;
+                },
+                // 获取data参数
+                getQueryParam(param) {
+                    var regex = new RegExp('[?&]' + param + '(=([^&#]*)|&|#|$)');
+                    var results = regex.exec(window.location.href);
+                    if (!results) return null;
+                    if (!results[2]) return '';
+                    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+                },
+                /** 导出*/
+                // 全部导出
+                ecportChange(){
+                    this.ecport();
+                },
+                downloadFromStream(stream, filename) {
+                    // 将流转换为 Blob
+                    const blob = new Blob([stream], { type: 'application/octet-stream' });
+
+                    // 创建一个临时 URL
+                    const url = URL.createObjectURL(blob);
+
+                    // 创建一个下载链接并模拟点击
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename || 'download'; // 默认文件名
+                    document.body.appendChild(a);
+                    a.click();
+
+                    // 清理资源
+                    setTimeout(() => {
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    }, 0);
+                },
+                async ecport() {
+                    let ym = null;
+                    // ym = 'http://t-inspect-1.zh-hongyu.cn:80';
+                    // // ym = 'http://back.puchayun.com.cn';
+                    ym = window.location.protocol+window.location.host
+                    var data = {
+                            // "searchId":"6VvIWdUm"
+                            "searchId": this.getQueryParam('id')
+                        }
+                    fetch('/biz/warnPageDetail/export',{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => response.blob())
+                    .then(blob => {
+                        this.downloadFromStream(blob, '可疑外链.xlsx');
+                    })
+                    .catch(error => console.error('下载失败:', error));
+                },
+                // /biz/warnPageDetail/warnRoute
+                /** 源数据*/
+                async fetchData(pgNum,pgSize) {
+                    let ym = null;
+                    ym = 'http://t-inspect-1.zh-hongyu.cn:80';
+                    // ym = 'http://back.puchayun.com.cn';
+                    // ym = window.location.protocol+window.location.host;
+                    try {
+                        var data = {
+                            // "searchId":"6VvIWdUm"
+                            "searchId": this.getQueryParam('id'),
+                            'pgNum': pgNum,
+                            'pgSize': pgSize,
+                        }
+                        // const res = await fetch('http://192.168.0.4:8081/apiSnap/correction/location', {
+                        const res = await fetch('/biz/warnPageDetail/list', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
+                        });
+                        if (!res.ok) {}
+                        const httpDate = await res.json();
+                        this.total = httpDate.total;
+                        console.log(httpDate.rows)
+                        if(pgNum > 1 && this.dateList.length < this.total && httpDate.rows.length != 0){
+                            this.dateList = this.dateList.concat(httpDate.rows)
+                        }else{
+                            this.dateList = httpDate.rows;
+                        }
+                        console.log(this.dateList,'列表数据')
+                        for(var i in this.dateList){
+                            this.dateList[i].index = parseInt(i)+1;
+                            // 外链所在页面所属栏目
+                            if(!this.dateList[i].columnName){
+                                this.dateList[i].columnName = '--'
+                            }
+                            // 链接位置
+                            if(!this.dateList[i].locationText){
+                                this.dateList[i].locationText = '--'
+                            }
+                            if(this.dateList[i].appType == 1){ // 微信
+                                this.dateList[i].appTypeImg = '../images/warn/wx.jpeg';
+                            }else if(this.dateList[i].appType == 2){ // 微博
+                                this.dateList[i].appTypeImg = '../images/warn/wb.jpeg';
+                            }else if(this.dateList[i].appType == 3){ // 抖音
+                                this.dateList[i].appTypeImg = '../images/warn/dy.jpeg';
+                            }else if(this.dateList[i].appType == 4){ // 头条
+                                this.dateList[i].appTypeImg = '../images/warn/tt.jpeg';
+                            }else if(this.dateList[i].appType == 5){ // 快手
+                                this.dateList[i].appTypeImg = '../images/warn/ks.jpeg';
+                            }else{ // 其他
+                                this.dateList[i].appTypeImg = '../images/warn/qt.png';
+                            }
+                        }
+                        console.log(this.dateList,'this.dateList')
+                        
+                        
+                    } catch (error) {
+                        this.loading = false;
+                    }
+                },
+            },
+        
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="referrer" content="no-referrer">
+    <link rel="icon" href="./favicon.ico">
+    <link rel="stylesheet" type="text/css" href="https://sfj.jz.gov.cn/_sitegray/_sitegray_d.css">
+    <title></title>
+    <!--[if lt IE 11]><script>window.location.href='/html/ie.html';</script><![endif]-->
+    <script src="./js/vue.min.js"></script>
+    <link rel="stylesheet" href="./css/element_ui.css">
+    <script src="./js/vue.js"></script>
+    <script src="./js/element_ui.js"></script>
+</head>
+
+<body>
+    <div id="app" v-loading="loading">
+        <!-- 源码 -->
+        <div class="ym" v-if="tabIndex == 0"  ref="ymym">
+            <!-- <span>
+                {{ymHtmlL}}
+                <span v-html="ymHtmlC"></span>
+                {{ymHtmlR}}
+            </span> -->
+            <span v-for="(item, index) in ymArr" :key="index">
+                <span style="white-space: pre-line;">{{item.one}}</span>
+                <span v-html="item.two" @click="handleDynamicClick" @mouseover="handleMouseOver" @mouseout="handleMouseOut"></span>
+                <span style="white-space: pre-line;">{{item.three}}</span>
+            </span>
+            
+            
+            <!-- {{ymHtml}} -->
+        </div>
+        <div style="width: 100%;height:1px" v-if="tabIndex == 0"></div>
+        <!-- 网页 -->
+        <div class="wy" v-html="htmlhtml"  v-if="tabIndex == 1" ref="paragraph">
+        <!-- <div class="wy"><iframe :srcdoc="htmlhtml" sandbox style="width: 100%; height: 100%; border: none;" v-if="tabIndex == 1" ></iframe></div> -->
+            
+        </div>
+        <!-- 浮框 -->
+        <div class="fk" :style="style" v-if='dataList.length > 0'>
+            <!-- tab -->
+            <div class="fktop">
+                <img src="./images/drop.png" alt="" class="dw" @mousedown="dragStart" @touchstart="dragStart">
+                <div class="btnBox">
+                    <div class="btn" v-for="(item, index) in tabList" :key="index" @click="tabChange(index)" :class="tabIndex == index ? 'active' : ''">
+                        <img :src="item.ico" class="ico" v-if="tabIndex == 1" style="top:0"/>
+                        <img :src="item.icon" class="ico" v-if="tabIndex == 0"/>
+                        {{item.label}}
+                    </div>
+                </div>
+                <div class="r" @mouseenter="beforeEnter" @mouseleave="enter">
+                    <img src="./images/up.png" alt="" class="up" v-if="!closeS" :style="{ transform: `rotate(${rotationAngle}deg)` }" @click="show">
+                    <img src="./images/close.png" alt="" class="close" v-if="closeS2" :style="{ transform: `rotate(${rotationAngle2}deg)` }" @click="close">
+                </div>
+            </div>
+            <!-- 内容 -->
+            <div class="con" v-if="rotationAngle2 == 90">
+                <!-- tab -->
+                <div class="conT">
+                    <span class="sjx"></span>
+                    <div class="conTT">
+                        <div class="tabtab">
+                            <span class="tabSp" v-for="(item, index) in tabList2" :key="index" :class="tabAllIndex == index ? 'active2' : ''" @click="tabAllChange(index)">
+                                {{item.label}}
+                                <span v-if="item.value == 2" style="color:#ffffff;font-size:12px" :class="tabAllIndex == index ? 'active2' : ''">({{dataList.length}})</span>
+                            </span>
+                        </div>
+                        <div class="conTC">
+                            <div class="cmtj">
+                                <span class='cmtjSp'>错链地址</span>
+                                <span class='cmtjSp' style="width:20%">问题类型</span>
+                            </div>
+                            <!-- 当前 -->
+                            <ul class="ul" v-if="tabAllIndex == 0">
+                                <li class="li" @mouseenter="beforeEnter2" @mouseleave="enter2" @click="sxwChange" ref="dqLi">
+                                    <span class="liSP">
+                                        <span class="cbz">{{dqObj.url}}</span>
+                                        <img src="./images/copy.png" alt="" class="copyImg" v-if="copyS" @click.stop="copyChange(dqObj.url)">
+                                        <input v-model="textToCopy" type="text" placeholder="输入要复制的文本" style="display: none;">
+                                    </span>
+                                    <!-- <div class="xyb"><img src="./images/next.png" alt="" class="xybImg"></div> -->
+                                    <span class="liSP" style="width: 20%">{{dqObj.contentTypeText}}</span>
+                                </li>
+                            </ul>
+                            <!-- 全部 -->
+                            <ul class="ul" v-if="tabAllIndex == 1">
+                                <li class="li" @mouseenter="beforeEnter3(index)" @mouseleave="enter3(index)" v-for="(item,index) in dataList" :key="index" :class="allClassIndex == index ? 'allClass' : ''" @click="sxwAllChange(item,index)">
+                                    <span class="liSP">
+                                        <span class="cbz">{{item.url}}</span>
+                                        <img src="./images/copy.png" alt="" class="copyImg" v-if="item.icoS" @click.stop="copyChange(item.url)">
+                                        <input v-model="textToCopy" type="text" placeholder="输入要复制的文本" style="display: none;">
+                                    </span>
+                                    <!-- <div class="xyb"><img src="./images/next.png" alt="" class="xybImg"></div> -->
+                                    <span class="liSP" style="width: 20%">{{item.contentTypeText}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="conTB"></div>
+                </div>
+                <!-- 信息 -->
+                <div class="conC">
+                    <div class="pp">
+                        <span class="ss">网站信息：</span>
+                        <!-- <span class="aa" @click="open(dqObj.siteUrl)">{{dqObj.siteName}}</span> -->
+                        <a :href="dqObj.url" class="aa" @click.prevent="() => open(dqObj.siteUrl)">{{dqObj.siteName}}</a>
+                    </div>
+                    <div class="pp">
+                        <span class="ss">网站标识码：</span>
+                        <span style="color:rgba(0, 0, 0, 0.65);font-size:12px">{{dqObj.siteCode}}</span>
+                    </div>
+                    <div class="pp">
+                        <span class="ss">快照时间：</span>
+                        <span style="color:rgba(0, 0, 0, 0.65);font-size:12px">{{dqObj.scanTime}}</span>
+                    </div>
+                    <!-- <div class="pp">
+                        <span class="ss">所在地址：</span>
+                        <a :href="dqObj.url" class="aa" @click.prevent="() => open(dqObj.url)">{{dqObj.title}}</a>
+                    </div> -->
+                    <div class="pp">
+                        <span class="ss">错链地址：</span>
+                        <!-- <span class="aa" @click="open(dqObj.fromUrl)">{{dqObj.fromTitle}}</span> -->
+                        <a :href="oldUrl" class="aa" @click.prevent="() => open(oldUrl)">{{oldUrl}}</a>
+                    </div>
+                    <div class="pp" v-if="dqObj.relativeUrl">
+                        <span class="ss">错链原地址：</span>
+                        <span class="vv" style="color:rgba(0, 0, 0, 0.65);font-size:12px">{{dqObj.relativeUrl}}</span>
+                    </div>
+                    <div class="pp">
+                        <span class="ss">父页面地址：</span>
+                        <!-- <span class="aa" @click="open(dqObj.fromUrl)">{{dqObj.fromTitle}}</span> -->
+                        <a :href="dqObj.fromUrl" class="aa" @click.prevent="() => open(dqObj.fromUrl)">{{dqObj.fromTitleTxt}}</a>
+                    </div>
+                </div>
+                <!-- 底部 -->
+                <div class="conB">
+                    <!-- <span class="gth">!</span> -->
+                    <img src="./images/ts.png" style="width:16px;height:16px;margin-top:3px;margin-right:5px;" />
+                    <!-- <span>外链源码中存在空格换行等情况时有概率出现无法定位的情况</span> -->
+                    <span style="color: rgb(232, 129, 25);font-size:12px;">{{toitTxt}}</span>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+    <script>
+        // 创建Vue实例
+        new Vue({
+            
+            el: '#app',
+            data: {
+                loading: true,
+                dataList: [],
+                dqObj: {},
+                ymHtml: null,
+                htmlhtml: ``,
+                html: ``,
+                toitTxt: '源码中存在空格换行等情况时有概率出现无法定位的情况',
+                tabIndex: 0,
+                tabList: [
+                    { label: '源码', value: 1, ico: './images/p1.png', icon: './images/p2.png' },
+                    { label: '网页', value: 2, ico: './images/p4.png', icon: './images/p3.png' }
+                ],
+                closeS: false,
+                closeS2: false,
+                rotationAngle: 90,
+                rotationAngle2: 90,
+                tabList2: [
+                    { label: '当前', value: 1 },
+                    // { label: '全部', value: 2 }
+                ],
+                tabAllIndex: 0,
+                copyS: false,
+                sxwS: false,
+                allObj: {},
+
+                highlightedIndices: [],
+                paragraphs: [
+                    '营业执照或者其他证明主体资格合法有效的文件；',
+                    '《锦州市人民政府关于修改〈锦州市城市户外广告和招牌设置管理办法〉的决定》已经2023年12月4日市人民政府第20次常务会议审议通过，现予公布，自公布之日起施行。',
+                    // ...其他段落
+                ],
+
+                newArr: [],
+                buttonDisplay: 'none', // 控制子元素是否显示的变量
+
+                dragging: false,
+                offset: { x: 0, y: 0 },
+                style: {
+                    position: 'fixed',
+                    top: '10px',
+                    right: '10px'
+                },
+
+                djS: false,
+
+                allClassIndex: -1,
+
+                ymArr: [],
+                newYmArr: [],
+
+                ymLength: 0,
+                ymLastHtml: null,
+
+                ymxbArr: [],
+                ymWordLength: [],
+
+                oneIndex: 0,
+
+                sxwS: false,
+
+                textToCopy: '',
+
+                str: `<li><a href="http://www.baidu.com">请问水电费</a></li><li><a href="http://www.sdfsf.com">啊实打实</a></li><li><a href="http://www.asd.com">水电费水电费</a></li>`,
+                parsedItems: ``,
+
+                newWord: null,
+            },
+            created () {
+                this.fetchData()
+            },
+            mounted() {
+                
+            },
+            methods: {
+                // tab切换 0源码 1网页
+                tabChange(index){
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth' // 平滑滚动效果
+                    });
+                    if (!this.dragging) {
+                        this.tabIndex = index;
+                        // this.htmlhtml = '<li class="cf"><a class="fl" href="/xwzx/bmxx/art/2024/art_3bcf791cea284269a2a8c6b9203b88c1.html" target="_blank"><i></i><div style="font-size:30px;color:red;">【县委统战部】崇信：聚奋进之力 展民盟之为</div></a> <span class="fr">2024-06-18</span></li>'
+                        this.htmlhtml = this.html;                        
+                        if(index == 0){ // 源码
+                            this.toitTxt = '源码中存在空格换行等情况时有概率出现无法定位的情况';
+                            this.ymArr = [];
+                            this.ymxbArr = [];
+                            this,ymWordLength = [];
+                            if(this.tabAllIndex == 0){
+                                this.$refs.dqLi.style.background = '';
+                                this.highlightKeyword();
+                            }else if(this.tabAllIndex == 1){
+                                for(var i in this.dataList){
+                                    this.highlightKeywordAll(i);
+                                } 
+                                setTimeout(()=>{
+                                    this.MarkingFn();
+                                },100)
+                            }
+                            // this.highlightKeyword();
+                        }else{ // 网页
+                            this.toitTxt = '存在翻页或隐藏文案等情况时有概率出现无法定位的情况，请切换至“源码”中查看或联系交付人员';
+                            // this.html = '<p>  市统计局在济宁统计信息网（外网）http://www.jimo.gov.cn/hdjl/hfzx/lmzz/202407/W020240709376983336348.mp3/及济宁统计信息网（内网），以"政务公开"和"统计服务"为主题，进行了有针对性的调整和完善，细化了具有统计特色的栏目模块，如：组织机构、文件通知、政策法规、领导讲话、制度标准、统计分析、统计数据、统计年鉴、统计公报等。建立第三次经济普查专题，重新整合规范原有栏目的子栏目，将过期空白栏目进行了删除。</p >'
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(this.html, 'text/html');
+
+                            const regex = new RegExp(`(src|href)="${this.newWord}"`, 'i');
+                            let attributeRegex = /(\b(src|href)="[^"]*")/gi;
+                            let isWrapped = false;
+                            // this.newWord = 'http://www.jimo.gov.cn/hdjl/hfzx/lmzz/202407/W020240709376983336348.mp3'
+                            let newUrl = this.newWord;
+                            this.html.replace(attributeRegex, function(match, attribute) {
+                                console.log(attribute,'attribute')
+                                // 检查属性值是否等于 filePath
+                                if (attribute.includes(newUrl)) {
+                                    isWrapped = true;
+                                    // 找到匹配后，可以停止进一步的处理
+                                    return '';
+                                }
+                                return match;
+                            });
+                            const isNotSrcHref = regex.test(this.html);
+                            if(isWrapped == false){ // 未被a img audio video标签包裹
+                                this.htmlhtml = this.html.replace(this.newWord,`<span class="customStyleTxt">${this.newWord}</span>`)
+                                
+                            }else{
+                                this.newWord = this.newWord.replace('&amp;',"&");
+                                console.log(this.newWord,'0123')
+                                // this.newWord = 'http://www.guangrao.gov.cn/art/2022/1/25/art_90377_10316211.html';
+                                const bigLinkArr = Array.prototype.slice.call(doc.querySelectorAll('a','img','audio','video'),0);
+                                // 获取所有的 <a> 标签
+                                const aTags = Array.from(doc.querySelectorAll('a'));
+                                console.log(aTags,'a标签集合')
+                                aTags.forEach(link => {
+                                    console.log(link.href)
+                                    if (link.href.includes(this.newWord.replace(/\\/g, '/'))) {
+                                        link.classList.add('customStyle'); // 添加自定义样式类
+                                    }
+                                });
+                                // 获取所有的 <img> 标签
+                                const imgTags = Array.from(doc.querySelectorAll('img'));
+                                console.log(imgTags,'img标签集合')
+                                imgTags.forEach(link => {
+                                    if (link.src.includes(this.newWord.replace(/\\/g, '/'))) {
+                                        link.classList.add('customStyleImg'); // 添加自定义样式类
+                                    }
+                                });
+                                // 获取所有的 <audio> 标签
+                                const audioTags = Array.from(doc.querySelectorAll('audio'));
+                                console.log(audioTags,'audio标签集合')
+                                audioTags.forEach(link => {
+                                    if (link.src.includes(this.newWord.replace(/\\/g, '/'))) {
+                                        link.classList.add('customStyleImg'); // 添加自定义样式类
+                                    }
+                                });
+                                // 获取所有的 <video> 标签
+                                const videoTags = Array.from(doc.querySelectorAll('video'));
+                                console.log(videoTags,'video标签集合')
+                                videoTags.forEach(link => {
+                                    if (link.src.includes(this.newWord.replace(/\\/g, '/'))) {
+                                        link.classList.add('customStyleImg'); // 添加自定义样式类
+                                    }
+                                });
+                                console.log(this.newWord)
+                                //  // 获取所有的 <script> 标签
+                                // const scriptTags = Array.from(doc.querySelectorAll('script'));
+                                // console.log(scriptTags,'script标签集合')
+                                // scriptTags.forEach(link => {
+                                //     console.log(link.src)
+                                //     if (link.src.includes(this.newWord.replace(/\\/g, '/'))) {
+                                //         link.classList.add('customStyleImg'); // 添加自定义样式类
+                                //     }
+                                // });
+
+                                this.htmlhtml = doc.documentElement.innerHTML;
+                            }
+                            setTimeout(()=>{
+                                // a标签 href
+                                const element = document.querySelector('.customStyle');
+                                if(element){
+                                    const rect = element.getBoundingClientRect();
+                                    const position = {
+                                        top: rect.top + window.scrollY,
+                                        right: rect.right,
+                                        bottom: rect.bottom,
+                                        left: rect.left + window.scrollX
+                                    };
+                                    window.scrollTo({
+                                        top: position.top-150,
+                                        behavior: 'smooth' // 平滑滚动效果
+                                    });
+                                }
+                                // img audio video标签 src
+                                const elementImg = document.querySelector('.customStyleImg');
+                                if(elementImg){
+                                    const rectImg = elementImg.getBoundingClientRect();
+                                    const positionImg = {
+                                        top: rectImg.top + window.scrollY,
+                                        right: rectImg.right,
+                                        bottom: rectImg.bottom,
+                                        left: rectImg.left + window.scrollX
+                                    };
+                                    window.scrollTo({
+                                        top: positionImg.top-150,
+                                        behavior: 'smooth' // 平滑滚动效果
+                                    });
+                                }
+                                // text 纯文本
+                                const elementTxt = document.querySelector('.customStyleTxt');
+                                if(elementTxt){
+                                    const rectTxt = elementTxt.getBoundingClientRect();
+                                    const positionTxt = {
+                                        top: rectTxt.top + window.scrollY,
+                                        right: rectTxt.right,
+                                        bottom: rectTxt.bottom,
+                                        left: rectTxt.left + window.scrollX
+                                    };
+                                    window.scrollTo({
+                                        top: positionTxt.top-150,
+                                        behavior: 'smooth' // 平滑滚动效果
+                                    });
+                                }
+                                
+
+                            },1000)
+                        }
+                    }
+                },
+                // 滑入
+                beforeEnter() {
+                    if(this.rotationAngle == 90){
+                        this.closeS = true;
+                        this.closeS2 = true;
+                    }
+                },
+                // 滑出
+                enter() {
+                    this.closeS = false;
+                    this.closeS2 = false;
+                    if(this.rotationAngle2 == 90){
+                        setTimeout(()=>{
+                            this.rotationAngle = 90;
+                        },10)
+                    }    
+                },
+                // 显示
+                show(){
+                    if (!this.dragging) {
+                        this.closeS = true; 
+                        this.closeS2 = true;                        
+                        setTimeout(()=>{
+                            this.rotationAngle2 = 90; // 每次点击增加90度
+                        },10)
+                    }
+                    
+                },
+                // 隐藏
+                close(){
+                    if (!this.dragging) {
+                        this.closeS = false;
+                        this.closeS2 = false;   
+                        this.rotationAngle = 0;
+                        this.rotationAngle2 = 0;
+                    }
+                },
+                // 打开超链接
+                open(val){
+                    window.open(val)
+                },
+                // 内容切换 0当前 1全部
+                tabAllChange(index){
+                    if (!this.dragging) {
+                        this.tabAllIndex = index;
+                        this.sxwS = false;
+                        this.sxwAllS = false;
+                        this.allObj = {};
+                        console.log(index)
+                        this.htmlhtml = this.html;
+                        if(this.tabIndex == 0){  // 源码
+                            this.ymArr = [];
+                            this.ymxbArr = [];
+                            this,ymWordLength = [];
+                            if(index == 0){
+                                // 当前
+                                this.highlightKeyword();
+                            }else if(index == 1){
+                                // 全部
+                                for(var i in this.dataList){
+                                    this.highlightKeywordAll(i);
+                                }
+                                setTimeout(()=>{
+                                    this.MarkingFn();
+                                },100)
+                            }
+                        }else{ // 网页
+                            window.scrollTo({
+                                top: 0,
+                                behavior: 'smooth' // 平滑滚动效果
+                            });
+                        }
+                        
+                        this.djS = false;
+                    }
+                    
+                },
+                // 显示上下文-全部
+                sxwAllChange(val,index){
+                    this.allClassIndex = index;
+                    console.log(index,'当前元素下标id')
+                    let newIndex = null;
+                    if(this.tabIndex == 1){
+                        this.tabIndex = 0;
+                        if(this.tabAllIndex == 0){
+                            this.ymArr = [];
+                            this.ymxbArr = [];
+                            this,ymWordLength = [];
+                            this.highlightKeyword();
+                            // this.tabAllIndex = 0
+                        }else{
+                            this.ymArr = [];
+                            this.ymxbArr = [];
+                            this,ymWordLength = [];
+                            for(var i in this.dataList){
+                                this.highlightKeywordAll(i);
+                            } 
+                            setTimeout(()=>{
+                                this.MarkingFn();
+                            },100)
+                        }
+                    }else{
+                        if (!this.dragging) {
+                            // 浮框显示
+                            for(var i in this.newArr){
+                                if(this.newArr[i].sentence == val.sentence){
+                                    newIndex = i;
+                                }
+                            }
+                            let ysIndex = '.bhys'+newIndex;
+                            let fkIndex = '.bhfk'+newIndex;
+                            const elementAll = document.querySelectorAll('#bhfkAll')
+                            for(var j in elementAll){
+                                if('.'+elementAll[j].className == fkIndex){
+                                    const element = document.querySelector(ysIndex);
+                                    element.classList.add('blink-background')
+                                    // 等待动画结束后移除类
+                                    setTimeout(() => {
+                                        element.classList.remove('blink-background');
+                                    }, 1000);
+                                    const rect = element.getBoundingClientRect();
+                                    const position = {
+                                        top: rect.top + window.scrollY,
+                                        right: rect.right,
+                                        bottom: rect.bottom,
+                                        left: rect.left + window.scrollX
+                                    };
+                                    console.log(position,'定位');
+                                    // window.scrollTo(0,position.top-150)
+                                    window.scrollTo({
+                                        top: position.top-150,
+                                        behavior: 'smooth' // 使滚动平滑
+                                    });
+                                    if(!elementAll[j].style.display){
+                                        element.classList.add('blink-background')
+                                        // 等待动画结束后移除类
+                                        setTimeout(() => {
+                                            element.classList.remove('blink-background');
+                                        }, 1000);
+                                        if(this.tabIndex == 0){ // 源码
+                                            // 获取元素
+                                            var ymel = document.querySelector('.ym');
+                                            // 获取元素的滚动高度
+                                            var ymelH = ymel.scrollHeight;
+                                            // 打印高度
+                                            console.log(ymelH);
+                                            // 左右
+                                            if(position.left != 0){
+                                                if(position.left == 131){
+                                                    elementAll[j].style.left = '-390px';
+                                                    elementAll[j].style.display = "block";
+                                                }else if(position.left >= window.innerWidth-620){
+                                                    elementAll[j].style.left = '-390px';
+                                                    elementAll[j].style.display = "block";
+                                                }else if(position.right+375 >= window.innerWidth){
+                                                    elementAll[j].style.left = '-390px';
+                                                    elementAll[j].style.display = "block";
+                                                }else{
+                                                    elementAll[j].style.left = element.offsetWidth+10+'px';
+                                                    elementAll[j].style.display = "block";
+                                                }
+                                            }else{
+                                                elementAll[j].style.left = '-390px';
+                                                elementAll[j].style.display = "block";
+                                            }
+                                            // 上下
+                                            if(position.top+elementAll[j].offsetHeight > ymelH){
+                                                elementAll[j].style.top = '-'+(elementAll[j].offsetHeight-25)+'px';
+                                                elementAll[j].style.display = "block";
+                                            }else{
+                                                elementAll[j].style.top = '0';
+                                                elementAll[j].style.display = "block";
+                                            }
+                                        }
+                                        
+                                    }else{
+                                        if(elementAll[j].style.display == 'none'){
+                                            element.classList.add('blink-background')
+                                            // 等待动画结束后移除类
+                                            setTimeout(() => {
+                                                element.classList.remove('blink-background');
+                                            }, 1000);
+                                            if(this.tabIndex == 0){ // 源码
+                                                // 获取元素
+                                                let ymel = document.querySelector('.ym');
+                                                // 获取元素的滚动高度
+                                                let ymelH = ymel.scrollHeight;
+                                                // 打印高度
+                                                console.log(ymelH);
+                                                if(position.left != 0){
+                                                    if(position.left == 131){
+                                                        elementAll[j].style.left = '-390px';
+                                                        elementAll[j].style.display = "block";
+                                                    }else if(position.left >= window.innerWidth-620){
+                                                        elementAll[j].style.left = '-390px';
+                                                        elementAll[j].style.display = "block";
+                                                    }else if(position.right+375 >= window.innerWidth){
+                                                        elementAll[j].style.left = '-390px';
+                                                        elementAll[j].style.display = "block";
+                                                    }else{
+                                                        elementAll[j].style.left = element.offsetWidth+10+'px';
+                                                        elementAll[j].style.display = "block";
+                                                    }
+                                                }else{
+                                                    elementAll[j].style.left = '-390px';
+                                                    elementAll[j].style.display = "block";
+                                                }
+                                                // 上下
+                                                if(position.top+elementAll[j].offsetHeight > ymelH){
+                                                    elementAll[j].style.top = '-'+(elementAll[j].offsetHeight-25)+'px';
+                                                    elementAll[j].style.display = "block";
+                                                }else{
+                                                    elementAll[j].style.top = '0';
+                                                    elementAll[j].style.display = "block";
+                                                }
+                                            }
+                                            
+                                        }else{
+                                            elementAll[j].style.display = "none";
+                                        }
+                                    }
+                                    
+                                }else{
+                                    if(elementAll[j]){
+                                        elementAll[j].style.display = "none";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+
+                },
+                 /** 当前*/
+                // 滑入
+                beforeEnter2() {
+                    this.copyS = true;
+                },
+                // 滑出
+                enter2() {
+                    this.copyS = false;   
+                },
+                /** 全部*/
+                beforeEnter3(index) {
+                    this.dataList[index].icoS = true;
+                    this.$forceUpdate();
+                },
+                // 滑出
+                enter3(index) {
+                    this.dataList[index].icoS = false; 
+                    this.$forceUpdate();
+                },
+                // 复制
+                copyChange(val){
+                    // if(!this.dragging){
+                    //     console.log(val,'val')
+                    //     var re = /&/g;
+                    //     let url = val.replace(re,"&amp;");
+                    //     navigator.clipboard.writeText(url);
+                    //     alert('已复制')
+                    // }
+                    // window.open(val)
+                    this.textToCopy = val;
+                    const textArea = document.createElement('textarea');
+                    textArea.value = this.textToCopy;
+                    textArea.style.position = 'fixed'; // 防止页面滚动时出现
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    try {
+                        const successful = document.execCommand('copy');
+                        if (successful) {
+                            alert('已复制');
+                        } else {
+                            alert('无法复制');
+                        }
+                    } catch (err) {
+                        console.error('无法复制文本: ', err);
+                    }
+                    document.body.removeChild(textArea);
+                },
+                // 显示上下文-当前
+                sxwChange(){
+                    this.$refs.dqLi.style.background = 'rgba(218,234,254,.7)';
+                    if(this.tabIndex == 1){ // 网页 
+                        this.tabIndex = 0;
+                        if(this.tabAllIndex == 0){
+                            this.ymArr = [];
+                            this.highlightKeyword();
+                        }else{
+                            this.ymArr = [];
+                            for(var i in this.dataList){
+                                this.highlightKeywordAll(i);
+                            } 
+                            setTimeout(()=>{
+                                this.MarkingFn();
+                            },100)
+                        }
+                    }
+                    console.log(this.dragging,'开关')
+                    if (!this.dragging) {
+                        this.djS = true; 
+                        this.sxwS = !this.sxwS;
+                        // 浮框显示
+                        const elementBj = document.querySelector('.bhfk');
+                        const element = document.querySelector('.bhys');
+                        element.classList.add('blink-background')
+                        // 等待动画结束后移除类
+                        setTimeout(() => {
+                            element.classList.remove('blink-background');
+                        }, 1000);
+                        const rect = element.getBoundingClientRect();
+                        const position = {
+                            top: rect.top + window.scrollY,
+                            right: rect.right,
+                            bottom: rect.bottom,
+                            left: rect.left + window.scrollX
+                        };
+                        console.log(position,'定位');
+                        window.scrollTo({
+                            top: position.top-150,
+                            behavior: 'smooth' // 使滚动平滑
+                        });
+                        if(this.sxwS == true){
+                            element.classList.add('blink-background')
+                            // 等待动画结束后移除类xx
+                            setTimeout(() => {
+                                element.classList.remove('blink-background');
+                            }, 1000);
+                            if(this.tabIndex == 0){ // 源码
+                                // 获取元素
+                                var ymel = document.querySelector('.ym');
+                                // 获取元素的滚动高度
+                                var ymelH = ymel.scrollHeight;
+                                var ymelW = ymel.innerWidth;
+                                // 打印高度
+                                console.log(ymelH);
+                                // 左右
+                                if(position.left != 0){
+                                    console.log(element.offsetWidth)
+                                    if(position.left == 131){
+                                        elementBj.style.left = '-390px';
+                                        elementBj.style.display = "block";
+                                    }else if(position.left >= window.innerWidth-620){
+                                        elementBj.style.left = '-390px';
+                                        elementBj.style.display = "block";
+                                    }else if(position.right+375 >= window.innerWidth){
+                                        elementBj.style.left = '-390px';
+                                        elementBj.style.display = "block";
+                                    }else{
+                                        elementBj.style.left = element.offsetWidth+10+'px';
+                                        elementBj.style.display = "block";
+                                    }
+                                }else{
+                                    elementBj.style.left = '-390px';
+                                    elementBj.style.display = "block";
+                                }
+                                // 上下
+                                if(position.top+elementBj.offsetHeight > ymelH){
+                                    elementBj.style.top = '-'+(elementBj.offsetHeight-25)+'px';
+                                    elementBj.style.display = "block";
+                                }else{
+                                    elementBj.style.top = '0';
+                                    elementBj.style.display = "block";
+                                }
+                            }
+                            
+                        }else{
+                            elementBj.style.display = "none";
+                        }
+                        
+                    }
+                },
+                // 网页-当前-标红
+                highlightedText() {
+                    
+                },
+                // 网页-全部-标红
+                highlightedTextAll(index) {
+                    
+                    
+                },
+               
+                htmlToText(html) {
+                    const doc = new DOMParser().parseFromString(html, 'text/html');
+                    return doc.body.textContent || "";
+                },
+                bhys(el){
+                    console.log(el)
+                },
+                formatHtmlString(str) {
+                    var element = document.createElement('div');
+                    element.innerText = str;
+                    return element.innerHTML;
+                },
+                // 点击
+                handleDynamicClick(event){
+                    this.djS = true;
+                    if(event.target.tagName == 'SPAN'){
+                        event.target.classList.add('blink-background')
+                        // 等待动画结束后移除类
+                        setTimeout(() => {
+                            event.target.classList.remove('blink-background');
+                        }, 1000);
+                        const childClass = '.'+event.target.firstElementChild.className;
+                        console.log(childClass,'childClass')
+                        if(childClass == '.bhfk'){ // 当前
+                            this.$refs.dqLi.style.background = 'rgba(218,234,254,.7)';                            
+                            event.target.classList.add('blink-background')
+                            // 等待动画结束后移除类
+                            setTimeout(() => {
+                                event.target.classList.remove('blink-background');
+                            }, 1000);
+                            const element = document.querySelector(childClass);
+                            console.log(event.target,'父元素') 
+                            console.log(element,'element') 
+                            
+                            const rect = event.target.getBoundingClientRect();
+                            const position = {
+                                top: rect.top + window.scrollY,
+                                right: rect.right,
+                                bottom: rect.bottom,
+                                left: rect.left + window.scrollX
+                            };
+                            console.log(position,'定位');
+                            window.scrollTo({
+                                top: position.top-150,
+                                behavior: 'smooth' // 使滚动平滑
+                            });
+                            if(this.tabIndex == 0){ // 源码
+                                // 获取元素
+                                var ymel = document.querySelector('.ym');
+                                // 获取元素的滚动高度
+                                var ymelH = ymel.scrollHeight;
+                                // 打印高度
+                                console.log(ymelH);
+                                // 左右
+                                if(position.left != 0){
+                                    if(position.left == 131){
+                                        element.style.left = '-390px';
+                                        element.style.display = "block";
+                                    }else if(position.left >= window.innerWidth-620){
+                                        element.style.left = '-390px';
+                                        element.style.display = "block";
+                                    }else if(position.right+375 >= window.innerWidth){
+                                        element.style.left = '-390px';
+                                        element.style.display = "block";
+                                    }else{
+                                        element.style.left = event.target.offsetWidth+10+'px';
+                                        element.style.display = "block";
+                                    }
+                                }else{
+                                    element.style.left = '-390px';
+                                    element.style.display = "block";
+                                }
+                                // 上下
+                                if(position.top+element.offsetHeight > ymelH){
+                                    element.style.top = '-'+(element.offsetHeight-25)+'px';
+                                    element.style.display = "block";
+                                }else{
+                                    element.style.top = '0';
+                                    element.style.display = "block";
+                                }
+                            }
+                            
+                            
+                        }else{ // 全部
+                            event.target.classList.add('blink-background')
+                            // 等待动画结束后移除类
+                            setTimeout(() => {
+                                event.target.classList.remove('blink-background');
+                            }, 1000);
+                            const elementAll = document.querySelectorAll('#bhfkAll')
+                            console.log(event,'asdasdasdadas')
+                            for(var j in elementAll){
+                                if('.'+elementAll[j].className == childClass){
+                                    this.allClassIndex = -1;
+                                    this.allClassIndex = j;
+                                    const rect = event.target.getBoundingClientRect();
+                                    const position = {
+                                        top: rect.top + window.scrollY,
+                                        right: rect.right,
+                                        bottom: rect.bottom,
+                                        left: rect.left + window.scrollX
+                                    };
+                                    console.log(position,'定位');
+                                    // window.scrollTo(0,position.top-150)
+                                    window.scrollTo({
+                                        top: position.top-150,
+                                        behavior: 'smooth' // 使滚动平滑
+                                    });
+                                    if(this.tabIndex == 0){ // 源码
+                                        // 获取元素
+                                        var ymel = document.querySelector('.ym');
+                                        // 获取元素的滚动高度
+                                        var ymelH = ymel.scrollHeight;
+                                        // 打印高度
+                                        console.log(ymelH);
+                                        // 左右
+                                        if(position.left != 0){
+                                            if(position.left == 131){
+                                                elementAll[j].style.left = '-390px';
+                                                elementAll[j].style.display = "block";
+                                            }else if(position.left >= window.innerWidth-620){
+                                                elementAll[j].style.left = '-390px';
+                                                elementAll[j].style.display = "block";
+                                            }else if(position.right+375 >= window.innerWidth){
+                                                elementAll[j].style.left = '-390px';
+                                                elementAll[j].style.display = "block";
+                                            }else{
+                                                elementAll[j].style.left = event.target.offsetWidth+10+'px';
+                                                elementAll[j].style.display = "block";
+                                            }
+                                        }else{
+                                            elementAll[j].style.left = '-390px';
+                                            elementAll[j].style.display = "block";
+                                        }
+                                        // 上下
+                                        if(position.top+elementAll[j].offsetHeight > ymelH){
+                                            elementAll[j].style.top = '-'+(elementAll[j].offsetHeight-25)+'px';
+                                            elementAll[j].style.display = "block";
+                                        }else{
+                                            elementAll[j].style.top = '0';
+                                            elementAll[j].style.display = "block";
+                                        }
+                                    }
+                                    
+                                }else{
+                                    // this.djS = false;
+                                    if(elementAll[j]){
+                                        elementAll[j].style.display = "none";
+                                    }
+                                }
+                            }
+                            console.log(elementAll,'elementAll')
+                        }
+                                              
+                    }
+                },
+                // 滑入
+                handleMouseOver(event) {
+                    // 获取划过的元素
+                    const target = event.target.firstElementChild.className;
+                    // 你可以在这里处理划过的元素
+                    if(event.target.tagName == 'SPAN'){
+                        console.log('子元素被划过：', target);
+                        const childClass = '.'+event.target.firstElementChild.className;
+                        console.log(childClass,'childClass')
+                        if(childClass == '.bhfk'){ // 当前
+                            const element = document.querySelector(childClass);
+                            console.log(event.target,'父元素') 
+                            console.log(element,'element') 
+                            const rect = event.target.getBoundingClientRect();
+                            const position = {
+                                top: rect.top + window.scrollY,
+                                right: rect.right,
+                                bottom: rect.bottom,
+                                left: rect.left + window.scrollX
+                            };
+                            console.log(position,'定位');
+                            if(this.tabIndex == 0){ // 源码
+                                // 获取元素
+                                var ymel = document.querySelector('.ym');
+                                // 获取元素的滚动高度
+                                var ymelH = ymel.scrollHeight;
+                                // 打印高度
+                                console.log(ymelH);
+                                // 左右
+                                if(position.left != 0){
+                                    if(position.left == 131){
+                                        element.style.left = '-390px';
+                                        element.style.display = "block";
+                                    }else if(position.left >= window.innerWidth-620){
+                                        element.style.left = '-390px';
+                                        element.style.display = "block";
+                                    }else if(position.right+375 >= window.innerWidth){
+                                        element.style.left = '-390px';
+                                        element.style.display = "block";
+                                    }else{
+                                        element.style.left = event.target.offsetWidth+10+'px';
+                                        element.style.display = "block";
+                                    }
+                                }else{
+                                    element.style.left = '-390px';
+                                    element.style.display = "block";
+                                }
+                                // 上下
+                                if(position.top+element.offsetHeight > ymelH){
+                                    element.style.top = '-'+(element.offsetHeight-25)+'px';
+                                    element.style.display = "block";
+                                }else{
+                                    element.style.top = '0';
+                                    element.style.display = "block";
+                                }
+                            }
+                            
+                        }else{ // 全部
+                            const elementAll = document.querySelectorAll('#bhfkAll')
+                            for(var j in elementAll){
+                                if('.'+elementAll[j].className == childClass){
+                                    // this.djS = true;
+                                    const rect = event.target.getBoundingClientRect();
+                                    const position = {
+                                        top: rect.top + window.scrollY,
+                                        right: rect.right,
+                                        bottom: rect.bottom,
+                                        left: rect.left + window.scrollX
+                                    };
+                                    console.log(position,'定位');
+                                    if(this.tabIndex == 0){ // 源码
+                                        // 获取元素
+                                        var ymel = document.querySelector('.ym');
+                                        // 获取元素的滚动高度
+                                        var ymelH = ymel.scrollHeight;
+                                        // 打印高度
+                                        console.log(ymelH);
+                                        // 左右
+                                        if(position.left != 0){
+                                            if(position.left == 131){
+                                                elementAll[j].style.left = '-390px';
+                                                elementAll[j].style.display = "block";
+                                            }else if(position.left >= window.innerWidth-620){
+                                                elementAll[j].style.left = '-390px';
+                                                elementAll[j].style.display = "block";
+                                            }else if(position.right+375 >= window.innerWidth){
+                                                elementAll[j].style.left = '-390px';
+                                                elementAll[j].style.display = "block";
+                                            }else{
+                                                elementAll[j].style.left = event.target.offsetWidth+10+'px';
+                                                elementAll[j].style.display = "block";
+                                            }
+                                        }else{
+                                            elementAll[j].style.left = '-390px';
+                                            elementAll[j].style.display = "block";
+                                        }
+                                        // 上下
+                                        if(position.top+elementAll[j].offsetHeight > ymelH){
+                                            elementAll[j].style.top = '-'+(elementAll[j].offsetHeight-25)+'px';
+                                            elementAll[j].style.display = "block";
+                                        }else{
+                                            elementAll[j].style.top = '0';
+                                            elementAll[j].style.display = "block";
+                                        }
+                                    }
+                                    
+                                }else{
+                                    // this.djS = false;
+                                    if(elementAll[j]){
+                                        elementAll[j].style.display = "none";
+                                    }
+                                }
+                            }
+                            console.log(elementAll,'elementAll')
+                        }
+                    }
+                },
+                // 滑出
+                handleMouseOut(event){
+                    if(!this.djS){
+                        // 获取划过的元素
+                        const target = event.target.firstElementChild.className;
+                        // 你可以在这里处理划过的元素
+                        if(event.target.tagName == 'SPAN'){
+                            console.log('子元素被划过：', target);
+                            const childClass = '.'+event.target.firstElementChild.className;
+                            console.log(childClass,'childClass')
+                            if(childClass == '.bhfk'){ // 当前
+                                const element = document.querySelector(childClass);
+                                element.style.display = "none";
+                            }else{ // 全部
+                                const elementAll = document.querySelectorAll('#bhfkAll')
+                                for(var j in elementAll){
+                                    elementAll[j].style.display = "none";
+                                }
+                                console.log(elementAll,'elementAll')
+                            }
+                        }
+                    }
+                    
+                },
+                // 拖拽移动
+                dragStart(e) {
+                    e.preventDefault();
+                    this.dragging = true;
+                    const rect = e.target.getBoundingClientRect();
+                    this.offset.x = e.clientX - rect.left;
+                    this.offset.y = e.clientY - rect.top;
+                    document.addEventListener('mousemove', this.drag);
+                    document.addEventListener('touchmove', this.drag);
+                    document.addEventListener('mouseup', this.dragEnd);
+                    document.addEventListener('touchend', this.dragEnd);
+                },
+                drag(e) {
+                    if (this.dragging) {
+                        this.offset.x
+                        const x = e.clientX - this.offset.x;
+                        const y = e.clientY - this.offset.y;
+                        let fj = document.querySelector('.fk');
+                        if(x+375+10 > window.innerWidth){
+                            x = window.innerWidth-10;
+                        }
+                        if(y <= 20){
+                            y = 20
+                        }else if(y >= window.innerHeight-fj.offsetHeight-20){
+                            y = window.innerHeight-fj.offsetHeight
+                        }
+                        this.style.left = `${x}px`;
+                        this.style.top = `${y}px`;
+
+                    }
+                },
+                dragEnd() {
+                    this.dragging = false;
+                    document.removeEventListener('mousemove', this.drag);
+                    document.removeEventListener('touchmove', this.drag);
+                    document.removeEventListener('mouseup', this.dragEnd);
+                    document.removeEventListener('touchend', this.dragEnd);
+                },
+
+                
+                /** 源码*/
+                highlightKeywordAll(index) {
+                    this.ymArr = [];
+                    var re = /&/g;
+                    // let url = this.dataList[index].url.replace(re,"&amp;");
+                    let url = this.dataList[index].url;
+                    console.log(url,'第'+index+'条数据的url')
+                    this.ymWordLength.push(url.length)
+                    let aa = this.ymHtml;  // 源码
+                    let aaArr = this.getAllIndexes(aa,url);
+                    if(aaArr.length == 0){
+                        // this.ymArr = [];
+                        // this.ymArr.push({one:this.ymHtml,two:'',three:''})
+                        // return
+                        url = url.slice(url.lastIndexOf('/'));
+                        aaArr = this.getAllIndexes(aa,url);
+                        console.log(url,'url')
+                        console.log(aaArr,'关键字出现的下标')
+                        let regex = new RegExp('="([^"]*' + url + ')"');
+                        let match = this.ymHtml.match(regex);
+                        console.log(match,'match')
+                        if (match && match[1]) {
+                            console.log(match[1]); // 输出: "../../../material/gongyong/sysyhqzf/css/main.css"
+                            url = match[1];
+                            this.ymWordLength = [];
+                            this.ymWordLength.push(url.length)
+                            aaArr = this.getAllIndexes(aa,url); 
+                            this.dataList[index].newUrl = url;                            
+                        } else {
+                            console.log('The path was not found in the string.');
+                            this.ymArr.push({one:this.ymHtml,two:'',three:''})
+                            this.dataList[index].newUrl = url;                            
+                            return
+                        }
+                    }else{
+                        this.dataList[index].newUrl = url;
+                    }
+                    console.log(aaArr,'aaArr')
+                    this.ymxbArr.push(aaArr[0])
+                    
+                    
+                    
+                },
+                MarkingFn(){
+                    console.log(this.ymWordLength,'ymWordLength')
+                    console.log(this.ymxbArr,'ymxbArr')
+                    let ab = this.ymxbArr.length;
+                    console.log(this.ymHtml.substring(41704,41741,'123'))
+                    for(var j in this.ymWordLength){
+                        for(var i in this.ymxbArr){
+
+                            if(i == j){
+                                console.log(this.ymxbArr[i])
+                                console.log(this.ymWordLength[j])
+                                ab--;
+                                console.log(ab,'ab')
+                                if(i == 0){
+                                    this.ymArr.push({
+                                        one: this.ymHtml.substring(0,this.ymxbArr[i]),
+                                        two:`<span style="cursor: pointer;
+                                                border-bottom: 4px solid rgba(250, 52, 82, 1);
+                                                padding: 0 2px;
+                                                margin: 0 2px;
+                                                font-weight: bold;
+                                                border-radius: 2px;
+                                                font-size: 16px !important;
+                                                color: #333 !important;
+                                                position: relative;
+                                                background-color: rgba(250, 52, 82, 0.2); ref="bhys" class="bhys${ab}">
+                                                    ${this.ymHtml.substring(this.ymxbArr[i],this.ymxbArr[i]+this.ymWordLength[j])}
+                                                    <div id="bhfkAll" class="bhfk${ab}">
+                                                        <div class="divdiv">
+                                                            <div class="bhfkT">
+                                                                ${this.dataList[i].url}
+                                                            </div>
+                                                            <ul class="ol">
+                                                                <li class="olli">问题类型：${this.dataList[i].contentTypeText}</li>                   
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </span>`
+                                    })
+                                }else{
+                                    this.ymArr.push({
+                                        one: this.ymHtml.substring(this.ymxbArr[i-1],this.ymxbArr[i]),
+                                        two:`<span style="cursor: pointer;
+                                                border-bottom: 4px solid rgba(250, 52, 82, 1);
+                                                padding: 0 2px;
+                                                margin: 0 2px;
+                                                font-weight: bold;
+                                                border-radius: 2px;
+                                                font-size: 16px !important;
+                                                color: #333 !important;
+                                                position: relative;
+                                                background-color: rgba(250, 52, 82, 0.2); ref="bhys" class="bhys${ab}">
+                                                    ${this.ymHtml.substring(this.ymxbArr[i-1],this.ymxbArr[i-1]+this.ymWordLength[j])}
+                                                    <div id="bhfkAll" class="bhfk${ab}">
+                                                        <div class="divdiv">
+                                                            <div class="bhfkT">
+                                                                ${this.dataList[i].url}
+                                                            </div>
+                                                            <ul class="ol">
+                                                                <li class="olli">问题类型：${this.dataList[i].contentTypeText}</li>                   
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </span>`
+                                    })
+                                }
+                            }
+                            
+                        }
+                    }
+                    
+                    this.ymArr.push({one:this.ymHtml.substring(this.ymxbArr[this.ymxbArr.length-1]+this.ymWordLength[this.ymWordLength.length-1],this.ymHtml.length)})
+                    // for(var i in this.ymxbArr){
+                    //     if(i == 0){
+                    //         aa.push({one:this.ymHtml.substring(0,this.ymxbArr[i])})
+                    //     }else{
+                    //         aa.push({one:this.ymHtml.substring(this.ymxbArr[i-1],this.ymxbArr[i])})
+                    //     }
+                    // }
+                    // console.log(aa,'源码文案')
+                    console.log(this.ymArr,'源码文案-新')
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth' // 使滚动平滑
+                    });
+                    setTimeout(()=>{
+                        console.log(this.ymxbArr.length,'this.ymxbArr.length')
+                        let num = '.bhys'+parseInt(this.ymxbArr.length-1);
+                        console.log(num,'num')
+                        const element = document.querySelector(num);
+                        console.log(element,'element')
+                        const rect = element.getBoundingClientRect();
+                        const position = {
+                            top: rect.top + window.scrollY,
+                            right: rect.right,
+                            bottom: rect.bottom,
+                            left: rect.left + window.scrollX
+                        };
+                        console.log(position,'定位');
+                        // window.scrollTo(0,position.top-150)
+                        window.scrollTo({
+                            top: position.top-150,
+                            behavior: 'smooth' // 使滚动平滑
+                        });
+                    },100)
+                    
+                },
+                formattedArray(aa) {
+                    return aa.map((current, index) => `${index === 0 ? '0,' : ''}${current},${aa[index + 1]}`);
+                },
+                splitStringByLengths(lengths, html) {  
+                    let startIndex = 0; // 当前分割的起始索引  
+                    let cc = []; // 存储结果的数组  
+                    
+                    // 遍历长度数组  
+                    for (let i = 0; i < lengths.length; i++) {  
+                        let length = lengths[i]; // 当前要分割的长度  
+                        let endIndex = startIndex + length; // 预期的结束索引  
+                    
+                        // 如果剩余字符串不足以填满当前长度，则使用剩余的所有字符  
+                        if (endIndex > html.length) {  
+                        endIndex = html.length;  
+                        }  
+                    
+                        // 提取子字符串并添加到结果数组中  
+                        cc.push(html.substring(startIndex, endIndex));  
+                    
+                        // 更新起始索引为下一个子字符串的起始位置  
+                        startIndex = endIndex;  
+                    
+                        // 如果已经处理完了整个html字符串，则退出循环  
+                        if (startIndex === html.length) {  
+                        break;  
+                        }  
+                    }   
+                    
+                    return cc;  
+                }  ,
+                /** 源码*/
+                highlightKeyword() {
+                    this.ymArr = [];
+                    var re = /&/g;
+                    let url = this.dqObj.url.replace(re,"&amp;");
+                    // let url = this.dqObj.url;
+                    console.log(url,'url')
+                    let aa = this.ymHtml;  // 源码
+                    let aaArr = this.getAllIndexes(aa,url);
+                    console.log(aaArr,'关键字出现的下标')
+                    if(aaArr.length == 0){
+                        url = url.slice(url.lastIndexOf('/'));
+                        aaArr = this.getAllIndexes(aa,url);
+                        console.log(url,'url')
+                        console.log(aaArr,'关键字出现的下标')
+                        let regex = new RegExp('="([^"]*' + url + ')"');
+                        let match = this.ymHtml.match(regex);
+                        console.log(match,'match')
+                        if (match && match[1]) {
+                            if(match[1] == url){
+                                console.log(match[1]); // 输出: "../../../material/gongyong/sysyhqzf/css/main.css"
+                                let newUrl = match[1];
+                                let urlLength = match[1].length;
+                                aaArr = this.getAllIndexes(aa,newUrl);
+                                console.log(newUrl,'标红元素')
+                                console.log(urlLength,'标红元素长度')
+                                console.log(aaArr,'关键字出现下标-新')
+                                this.newWord = aa.substring(aaArr[0],aaArr[0]+newUrl.length);
+                                console.log(this.newWord,'111')
+                                this.ymArr.push({
+                                    one: aa.substring(0,aaArr[0]),
+                                    two: `<span style="cursor: pointer;
+                                                border-bottom: 4px solid rgba(250, 52, 82, 1);
+                                                padding: 0 2px;
+                                                margin: 0 2px;
+                                                font-weight: bold;
+                                                border-radius: 2px;
+                                                font-size: 16px !important;
+                                                color: #333 !important;
+                                                position: relative;
+                                                background-color: rgba(250, 52, 82, 0.2); ref="bhys" class="bhys">
+                                                    ${aa.substring(aaArr[0],aaArr[0]+newUrl.length)}
+                                                    <div id="bhfkAll" class="bhfk">
+                                                        <div class="divdiv">
+                                                            <div class="bhfkT">
+                                                                ${this.dqObj.url}
+                                                            </div>
+                                                            <ul class="ol">
+                                                                <li class="olli">问题类型：${this.dqObj.contentTypeText}</li>                   
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </span>`,
+                                    three: aa.substring(aaArr[0]+newUrl.length,aa.length)
+                                })
+                                this.dqObj.newUrl = newUrl;
+                                console.log(this.ymArr,'源码文案')
+                                setTimeout(()=>{
+                                    console.log(document.querySelector('.bhys'))
+                                    const element = document.querySelector('.bhys');
+                                    const rect = element.getBoundingClientRect();
+                                    const position = {
+                                        top: rect.top + window.scrollY,
+                                        right: rect.right,
+                                        bottom: rect.bottom,
+                                        left: rect.left + window.scrollX
+                                    };
+                                    console.log(position);
+                                    // window.scrollTo(0,position.top-150)
+                                    window.scrollTo({
+                                        top: position.top-150,
+                                        behavior: 'smooth' // 使滚动平滑
+                                    });
+                                },1000)
+                            }else{
+                                console.log('The path was not found in the string.');
+                                this.ymArr.push({one:this.ymHtml,two:'',three:''})
+                                // // 提取路径部分（去掉协议部分）
+                                // let pathPart = url.substring(8); // "C:/Users/营商环~1/AppData/Local/Temp/ksohtml17296/wps1.png"
+                                // console.log(pathPart)
+                                
+                                // // 将路径部分的正斜杠替换为反斜杠
+                                // let correctedPathPart = pathPart.replace(/\//g, '\\');
+                                // console.log(pathPart)
+                                
+                                // // 重新拼接协议部分和修正后的路径部分
+                                // let finalCorrectedPath = "file:///" + correctedPathPart;
+                                // this.dqObj.newUrl = correctedPathPart;
+                                this.dqObj.newUrl = url;
+                            }
+                            
+                        } else {
+                            console.log('The path was not found in the string.');
+                            this.ymArr.push({one:this.ymHtml,two:'',three:''})
+                            // // 提取路径部分（去掉协议部分）
+                            // let pathPart = url.substring(8); // "C:/Users/营商环~1/AppData/Local/Temp/ksohtml17296/wps1.png"
+                            // console.log(pathPart)
+                            
+                            // // 将路径部分的正斜杠替换为反斜杠
+                            // let correctedPathPart = pathPart.replace(/\//g, '\\');
+                            // console.log(pathPart)
+                            
+                            // // 重新拼接协议部分和修正后的路径部分
+                            // let finalCorrectedPath = "file:///" + correctedPathPart;
+                            // this.dqObj.newUrl = correctedPathPart;
+                            this.dqObj.newUrl = url;
+                        }
+                        
+                    }else{
+                        // this.newWord = this.dqObj.url;
+                        this.newWord = aa.substring(aaArr[0],aaArr[0]+url.length);
+                        console.log(this.newWord,'222')                        
+                        this.ymArr.push({
+                            one: aa.substring(0,aaArr[0]),
+                            two: `<span style="cursor: pointer;
+                                        border-bottom: 4px solid rgba(250, 52, 82, 1);
+                                        padding: 0 2px;
+                                        margin: 0 2px;
+                                        font-weight: bold;
+                                        border-radius: 2px;
+                                        font-size: 16px !important;
+                                        color: #333 !important;
+                                        position: relative;
+                                        background-color: rgba(250, 52, 82, 0.2); ref="bhys" class="bhys">
+                                            ${aa.substring(aaArr[0],aaArr[0]+url.length)}
+                                            <div id="bhfkAll" class="bhfk">
+                                                <div class="divdiv">
+                                                    <div class="bhfkT">
+                                                        ${this.dqObj.url}
+                                                    </div>
+                                                    <ul class="ol">
+                                                        <li class="olli">问题类型：${this.dqObj.contentTypeText}</li>                   
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </span>`,
+                            three: aa.substring(aaArr[0]+url.length,aa.length)
+                        })
+                        this.dqObj.newUrl = url;
+                        console.log(this.ymArr,'源码文案')
+                        setTimeout(()=>{
+                            console.log(document.querySelector('.bhys'))
+                            const element = document.querySelector('.bhys');
+                            const rect = element.getBoundingClientRect();
+                            const position = {
+                                top: rect.top + window.scrollY,
+                                right: rect.right,
+                                bottom: rect.bottom,
+                                left: rect.left + window.scrollX
+                            };
+                            console.log(position);
+                            // window.scrollTo(0,position.top-150)
+                            window.scrollTo({
+                                top: position.top-150,
+                                behavior: 'smooth' // 使滚动平滑
+                            });
+                        },1000)
+                    }
+                    
+
+                },
+                // highlightKeyword() {
+                //     // let word = '将第';
+                //     // let sentence = '申请程序”。\n十三、将第三十条中的“小型”修';
+                //     // let newsentence = '十三、将第三十条';
+                //     // let word = '指任';
+                //     // let sentence = '一）大型户外广告，是指任一边长大于4米（含4';
+                //     let url = 'https://www.qianhuaweb.com/wyjb.shtml';
+                //     let aa = this.ymHtml;  // 源码
+                //     let aaArr = this.findAllIndexes(aa,url);
+                //     console.log(aaArr,'url出现的集合')
+                //     console.log(aa.substring(0,aaArr[0]))
+                //     console.log(aa.substring(aaArr[0],aaArr[0]+url.length))
+                //     console.log(aa.substring(aaArr[0]+url.length,aa.length))
+                //     this.ymArr.push({
+                //         one: aa.substring(0,aaArr[0]),
+                //         two: `<span style="cursor: pointer;
+                //                     border-bottom: 4px solid rgba(250, 52, 82, 1);
+                //                     padding: 0 2px;
+                //                     margin: 0 2px;
+                //                     font-weight: bold;
+                //                     border-radius: 2px;
+                //                     font-size: 16px !important;
+                //                     color: #333 !important;
+                //                     position: relative;
+                //                     background-color: rgba(250, 52, 82, 0.2); ref="bhys" class="bhys">
+                //                         ${aa.substring(aaArr[0],aaArr[0]+url.length)}
+                //                     </span>`,
+                //         three: aa.substring(aaArr[0]+url.length,aa.length)
+                //     })
+                //     console.log(this.ymArr,'源码文案')
+
+                // },
+
+
+                // html转text
+                htmlToText(html) {
+                    const doc = new DOMParser().parseFromString(html, 'text/html');
+                    return doc.body.textContent || "";
+                },
+                findKeywordIndex(array, keyword) {
+                    return array.findIndex(item => item === keyword);
+                },
+                // 关键字出现在字符串内位置的所有下标
+                findAllIndexes(str, keyword) {
+                    const regex = new RegExp(keyword, 'g');
+                    let match;
+                    const indexes = [];
+                    
+                    while ((match = regex.exec(str))) {
+                        indexes.push(match.index);
+                    }
+                    
+                    return indexes;
+                },
+                getAllIndexes(str, keyword) {
+                    var indexes = [];
+                    var index = str.indexOf(keyword);
+                    while (index !== -1) {
+                        indexes.push(index);
+                        index = str.indexOf(keyword, index + 1);
+                    }
+                    return indexes;
+                },
+                // 过滤符号
+                quote(str) { return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");},
+                convertCharsToEntities(str) {
+                    return str
+                            .replace(/(^|\W)“([^"]*)”(\W|$)/g, '$1&ldquo;$2&rdquo;$3')
+                            .replace(/(^|\W)‘([^']*)’(\W|$)/g, '$1&lsquo;$2&rsquo;$3')
+                            .replace(/(^|\W)‘<([^']*)>(\W|$)/g, '$1&lt;$2&rt;;$3')
+                            .replace(/\./g, '&middot;')
+                            .replace(/\n/g, '')
+                },
+                convertCharsToEntities2(str){
+                    return str
+                            .replace(/\s+/g, '\n')
+                },
+
+
+
+
+
+                getUrlParams(url) {
+                    const urlParams = new URLSearchParams(url.split('?')[1]);
+                    const params = {};
+                    for (let param of urlParams.entries()) {
+                        params[param[0]] = param[1];
+                    }
+                    return params;
+                },
+                // 获取data参数
+                getQueryParam(param) {
+                    var regex = new RegExp('[?&]' + param + '(=([^&#]*)|&|#|$)');
+                    var results = regex.exec(window.location.href);
+                    if (!results) return null;
+                    if (!results[2]) return '';
+                    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+                },
+
+                /** 源数据*/
+                async fetchData() {
+                    console.log(window.location.href,'url')
+                    console.log(window.location.protocol+window.location.host,'域名')
+                    console.log(window.location.search,'参数')
+                    let ym = null;
+                    // ym = 'http://192.168.0.102:80';
+                    // ym = 'http://192.168.0.102';
+                    ym = 'http://back.puchayun.com.cn';
+                    // ym = window.location.protocol+window.location.host;
+                    try {
+                        var data = {
+                            // "data":"1273ce487d584c177cb644b9dd2536058ac9cd8703d0903fba9d76c6d3377aaf19170f8f0e52bdda718b66399a24e36bcdfa67575cba04b9fcc2dade31c4fe3be8fe3ac66b895a3ef8cd0aa89159c975f89083cf5e1d7852419e7ad0bedddb3d29f37acc9499ee98d94fdfe202112dfe2acf936977830b6faaeb5ab02d3f0ca36372b690dcffcf0bf6dfbbc56505fce56786bcd67c68bfb73b2d022328db3efe08591b59607f9468769ecacaccfbb5fa"
+                            // "data":"1273ce487d584c177cb644b9dd253605b66507ba9dd4c2dbb3fc689bd949c2c4dcf7259f2253f2c276f023c3df9b8a0ecdfa67575cba04b9fcc2dade31c4fe3b00f28744d21c873d75ea34d9ca769542ca360358539de4673a80a49fcda6bc0eb971b1f72803751f34a700f8fca6fdc32acf936977830b6faaeb5ab02d3f0ca311c02f4fcb44625a9f33a9e715041cc42598dc997832b3d996a22e5cc3b127d708591b59607f9468769ecacaccfbb5fa"
+                            // "data":"7476c06138af374111d8d7b1d3ffde99214f3325d1cb3d6ade5ee209741e415ddbb3a4e1639639dc7ff86a797b5f7b241bd2037508c85ac122269f2515f593fd7a3b9e9c29bd9a0841e9b046d3b061eccc89e7838edb032a74da5458993f7d6cf0cc0a25903b467fb0bfd5a541e02b6c4406ce4963a3ffadade8c0866225945ba021533bb68bda21c4696d7f99e73bbeffff1d30b7b1faedd71d7582d5c6a4b5d93ea70c93778d13cf8b8ec1d515880b5bf5a616088173c34f73a45aaa63002a07933a886ea9b6a6c33508b5c470878a"
+                            "data":this.getQueryParam('data')
+
+                        }
+                        // const res = await fetch('http://192.168.0.4:8081/apiSnap/correction/location', {
+                        const res = await fetch('/apiSnap/errors/location', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        if (!res.ok) {}
+                        const httpDate = await res.json();
+                        if(httpDate.length == 0 || httpDate.data.length == 0){
+                            alert('暂无快照！')
+                            this.loading = false;
+                        }else{
+                            this.html = httpDate.html; // 网页
+                            this.htmlhtml = this.html;
+                            this.ymHtml = httpDate.html; // 源码
+                            this.ymLength = this.ymHtml.length; 
+                            this.ymLastHtml = this.ymHtml;
+                            this.oldUrl = httpDate.current.url;
+                            this.dqObj = httpDate.current;
+                            if(this.dqObj.relativeUrl != null && this.dqObj.relativeUrl != ''){
+                                this.dqObj.url = this.dqObj.relativeUrl;
+                            }
+                            console.log(this.dqObj.url.charAt(10),'11')
+                            // if(this.dqObj.url.charAt(10) == '\\'){
+                            //     alert('ok')
+                            // }
+                            if(this.dqObj.url.includes(':\\')){
+                                if(this.dqObj.url.startsWith('file:///')){
+                                    // 原始路径
+                                    let originalPath = "file:///C:/Users/营商环~1/AppData/Local/Temp/ksohtml17296/wps1.png";
+                                    
+                                    // 提取路径部分（去掉协议部分）
+                                    let pathPart = this.dqObj.url.substring(8); // "C:/Users/营商环~1/AppData/Local/Temp/ksohtml17296/wps1.png"
+                                    console.log(pathPart)
+                                    
+                                    // 将路径部分的正斜杠替换为反斜杠
+                                    let correctedPathPart = pathPart.replace(/\//g, '\\');
+                                    console.log(pathPart)
+                                    
+                                    // 重新拼接协议部分和修正后的路径部分
+                                    this.dqObj.url = "file:///" + correctedPathPart;
+                                    console.log(this.dqObj.url,'newthis.dqObj.url')
+                                }
+                            }
+                            
+                            this.dataList = httpDate.data;
+                            for(var i in this.dataList){
+                                this.dataList[i].icoS = false;
+                            }
+                            // 父页面信息
+                            if(!this.dqObj.fromTitle && !this.dqObj.fromUrl){
+                                this.dqObj.fromTitleTxt = '--';
+                            }else if(!this.dqObj.fromTitle){
+                                this.dqObj.fromTitleTxt = this.dqObj.fromUrl;
+                            }else{
+                                this.dqObj.fromTitleTxt = this.dqObj.fromTitle;
+                            }
+                            console.log(this.dqObj.fromTitleTxt,'this.dqObj.fromTitleTxt')
+                            // this.dqObj.wordLeft = this.dqObj.sentence.split(this.dqObj.word)[0];
+                            // this.dqObj.wordRight = this.dqObj.sentence.split(this.dqObj.word)[1];
+                            // 网页
+                            // this.highlightedText();
+                            this.newArr = this.dataList.slice().reverse()
+                            console.log(this.newArr)
+                            // 源码
+                            // setTimeout(()=>{
+                                this.highlightKeyword();
+                            // },1000)
+
+                            if(this.dqObj.siteName == null){
+                                document.title = '快照';
+                            }else{
+                                document.title = this.dqObj.siteName;
+                            }
+                            // setTimeout(()=>{
+                                this.loading = false;
+                            // },1000)
+                        }
+                        
+                        
+                    } catch (error) {
+                        this.loading = false;
+                        console.log('Error:' + error);
+                    }
+                },
+            },
+        
+        });
+    </script>
+</body>
+
+</html>
+<style>
+    /* *{
+        font-size: 12px!important;
+        color: #ffffff!important;
+    } */
+    html,body{
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        
+    }
+    #app{
+        height: 100%;
+        /* padding-top: 36px; */
+    }
+    #id{
+        position: relative;
+    }
+    .wy,.wywy{
+        height: 100%;
+    }
+    .draggable {
+        cursor: pointer;
+        user-select: none;
+        width: 100px;
+        height: 100px;
+        background-color: #3498db;
+        color: white;
+        /* text-align: center; */
+        /* line-height: 100px; */
+    }
+    .ym{
+        margin: 50px 110px;
+        background: pink;
+        width: 87%;
+        display: block;
+        padding: 12px 20px;
+        font-size: 12px;
+        line-height: 1.5;
+        color: #333;
+        word-break: break-all;
+        word-wrap: break-word;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .fk{
+        /* position: fixed; */
+        /* top: 10px; */
+        /* right: 10px; */
+        /* left: 10px; */
+        z-index: 1000;
+        width: 375px;
+        user-select: none;
+    }
+    .fktop{
+        position: relative;
+        /* width: 375px; */
+        /* padding: 0 4px; */
+        box-sizing: border-box;
+        padding: 4px 20px;
+        background: #2c7ef8;
+        box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.1);
+        border-radius: 50px;
+        border: 1px solid rgba(151, 231, 254, 1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .btnBox{
+        /* width: 271px; */
+        margin-right: 80px;
+    }
+    .btn{
+        display: inline-block;
+        cursor: pointer;
+        width: 104px;
+        height: 26px;
+        line-height: 26px;
+        text-align: center;
+        border-radius: 14px;
+        color: #fff;
+        font-size: 14px;
+        transition: 0.2s all;
+    }
+    .ico{
+        width: 14px;
+        position: relative;
+        top: 3px;
+        margin-right: 4px;
+    }
+    .dw{
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+    }
+    .r{
+        cursor: pointer;
+        position: absolute;
+        right: 0;
+        top: -2px;
+        box-sizing: border-box;
+        width: 38px;
+        height: 38px;
+        border-radius: 100%;
+        box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(130, 223, 255, 1);
+        transition: all 0.3s;
+        background: none !important;
+        text-align: center;
+        line-height: 38px;
+    }
+    .up{
+        width: 16px;
+        transition: transform 0.2s ease-in-out; /* 平滑旋转 */
+    }
+    .close{
+        width: 16px;
+        transition: transform 0.2s ease-in-out; /* 平滑旋转 */
+    }
+    .conT{
+        position: relative;
+        border-radius: 5px;
+        margin-top: 8px;
+        box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.25);
+    }
+    .sjx{
+        position: absolute;
+        left: 222px;
+        /* left: 122px; */
+        top: -10px;
+        border: 5px solid transparent;
+        border-bottom-color: #1577ff;
+    }
+    .conTT{
+        border-radius: 5px 5px 0 0;
+        min-height: 38px;
+        /* height: 70px; */
+        padding: 8px;
+        box-sizing: border-box;
+        background: #2c7ef8;
+    }
+    .tabtab{
+        display: flex;
+        height: 33px;
+        line-height: 33px;
+        font-size: 12px;
+        color: #ffffff;
+        padding: 0 10px;
+    }
+    .tabSp{
+        display: inline-block;
+        width: 80px;
+        text-align: center;
+        cursor: pointer;
+        color: #ffffff!important;
+        font-size: 12px;
+    }
+    .conTC{
+        margin-top: -1px;
+        padding: 15px 10px;
+        background: #fff;
+        border-radius: 4px;
+        font-size: 14px;
+        border: 1px solid #eff0f3;
+        /* margin: 0 8px; */
+    }
+    .cmtj{
+        margin-bottom: 10px;
+        display: flex;
+    }
+    .cmtjSp{
+        display: inline-block;
+        width: 70%;
+        font-weight: 600 !important;
+        font-size: 14px;
+        padding-left: 10px;
+        color: #2e405e;
+        line-height: 14px;
+
+    }
+    .ul{
+        max-height: 230px;
+        overflow-x: hidden;
+        background: rgb(245, 249, 255);
+        border-radius: 4px;
+        padding: 0;
+        margin: 0;
+    }
+    .li{
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 6px;
+        color: #1577ff;
+    }
+    .li:hover{
+        cursor: pointer;
+        background: rgba(218,234,254,.5);
+    }
+    .liSP{
+        display: inline-block;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        width: 65%;
+        color: #1577ff;
+    }
+    .cbz{
+        overflow: hidden; /* 确保超出容器的文本被隐藏 */
+        white-space: nowrap; /* 防止文本换行 */
+        text-overflow: ellipsis; /* 超出部分显示省略号 */
+        color: #1577ff;
+        font-size: 12px;
+    }
+    .xyb{
+        width: 40px;
+        margin: 0 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .xybImg{
+        width: 25px;
+    }
+    .copyImg{
+        width: 14px;
+        margin-left: 5px;
+    }
+    .conTB{
+        /* height: 82px; */
+        background-color: #fff;
+        padding: 8px;
+    }
+    .conC{
+        margin-top: 8px;
+        padding: 5px 12px;
+        border-radius: 3px;
+        background: #ffffff;
+        box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.25);
+        color: rgba(0, 0, 0, 0.65);
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 22px;
+        padding-top: 10px;
+    }
+    .pp{
+        display: flex;
+        /* line-height: 26px; */
+        padding: 1px 0;
+    }
+    .sxw{
+        line-height: 20px;
+        margin-top: -4px;
+    }
+    .ss{
+        display: inline-block;
+        color: #8c8c8c;
+        font-size: 12px !important;
+        min-width: 74px;
+    }
+    .sss{
+        min-width: 50px;
+    }
+    .aa{
+        /* cursor: pointer; */
+        /* flex: 1; */
+        font-size: 12px !important;
+        color: #2c7ef8 !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        /* border-bottom: 1px solid #2c7ef8; */
+        text-decoration: underline;
+
+    }
+    .vv{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        /* border-bottom: 1px solid #2c7ef8; */
+        text-decoration: underline;
+    }
+    
+    .aa:hover{
+        color: red!important;
+        text-decoration: underline;
+        /* border-bottom: 1px solid red!important; */
+    }
+    .conB{
+        margin-top: 8px;
+        padding: 12px;
+        border-radius: 3px;
+        background: #ffffff;
+        box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.25);
+        color: rgba(0, 0, 0, 0.65);
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 22px;
+        background-color: rgb(255, 247, 231);
+        color: rgb(232, 129, 25);
+        display: flex;
+        /* align-items: center; */
+    }
+    .gth{
+        display: inline-block;
+        margin-right: 4px;
+        color: #fff;
+        width: 16px;
+        height: 16px;
+        background-color: rgba(232, 129, 25, 0.8);
+        border-radius: 50%;
+        text-align: center;
+        line-height: 16px;
+    }
+    #bhfk,#bhfkAll{
+        display: none;
+        transition: all 0.3s;
+        z-index: 100;
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 8px;
+        width: 360px;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        border-left: 4px solid #fa3452;
+    }
+    .bhfkT{
+        display: flex;
+        border-bottom: 1px solid rgba(127, 135, 146, 0.1);
+        padding-bottom: 10px;
+        align-items: center;
+    }
+    .sL,.sC,.sR{
+        display: inline-block;
+        font-size: 12px;
+        font-weight: normal;
+    }
+    .sL,.sR{
+        /* width: 40%; */
+        flex: 1;
+    }
+    .sC{
+        width: 60px;
+        margin: 0 5px;
+    }
+    .sL{
+        color: rgb(92, 102, 133);
+    }
+    .sC{
+        color: rgb(136, 136, 136);
+    }
+
+    .divdiv{
+        background: rgba(0, 82, 255, 0.05);
+        border-radius: 5px;
+        padding: 10px 8px;
+
+    }
+    .ol{
+        margin: 0;
+        padding: 0;
+        padding-top: 8px;
+    }
+    .olli{
+        list-style: none;
+        font-size: 12px;
+        line-height: 20px;
+        color: #333333;
+        font-weight: normal;
+    }
+    
+
+
+    .active{
+        color: #2c7ef8!important;
+        background: #ffffff;
+    }
+    .active2{
+        color: #2c7ef8!important;
+        background: #ffffff;
+        border-radius: 5px 5px 0 0;
+    }
+    .allClass{
+        background: rgba(218,234,254,.7)!important;
+    }
+    .scroll-to-top {
+        animation: scrollToTopAnimation 0.5s ease forwards;
+    }
+    .blink-background {
+        animation-name: blink;
+        animation-duration: .5s;
+        animation-iteration-count: 2;
+        animation-fill-mode: both;
+    }
+    /* 自定义样式 */
+    .customStyle{
+        color: red; /* 修改文本颜色 */
+        font-weight: bold; /* 加粗文本 */
+        /* font-size: 20px!important; */
+        border: 4px solid red;
+        /* padding: 5px; */
+        animation: flash 1s infinite;
+
+    }
+    /* 自定义样式 */
+    .customStyleTxt{
+        /* font-size: 20px!important; */
+        border: 4px solid red;
+        /* padding: 5px; */
+        animation: flash 1s infinite;
+
+    }
+    /* 自定义样式 */
+    .customStyleImg{
+        color: red; /* 修改文本颜色 */
+        font-weight: bold; /* 加粗文本 */
+        /* font-size: 20px!important; */
+        border: 4px solid red;
+        padding: 5px;
+        animation: flash 1s infinite;
+
+    }
+    
+    @keyframes flash {
+        0%, 100% {
+            border-color: red; /* 开始和结束的边框宽度 */
+        }
+        50% {
+            border-color: #ffffff; /* 中间的边框宽度 */
+        }
+    }
+
+    @keyframes blink {
+        0% {
+            background-color: rgba(250, 52, 82, 0.2);;
+        }
+
+        50% {
+            background-color: #ffffff;
+        }
+
+        100% {
+            background-color: rgba(250, 52, 82, 0.2);;
+        }
+    }
+    
+    @keyframes scrollToTopAnimation {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    /* 应用动画到目标元素 */
+    .element {
+        animation: rotate90 1s infinite;
+    }
+    /* 定义一个名为rotate90的动画 */
+    @keyframes rotate90 {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(90deg);
+    }
+    }
+</style>

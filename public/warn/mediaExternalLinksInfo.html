@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>外链信息详情</title>
+    <script src="https://cdn.tailwindcss.com/3.3.3"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.15.6/lib/theme-chalk/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.4.11/lib/index.js"></script>
+    <style>
+        #app{
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .main{
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* 在iOS上启用平滑滚动 */
+            padding: 0 10px;
+        }
+        ul{
+            margin-bottom: 20px;
+        }
+        li{
+            background: #ffffff;
+            padding-top: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+            height: 97vh;
+        }
+        .d1{
+            color: #606266;
+            margin: 5px 0;
+            padding: 0 15px;
+            display: flex;
+        }
+        .d2{
+            color: #606266;
+            margin: 5px 0;
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 20px;
+            border-bottom: 1px solid #EBEEF5;
+        }
+        .y{
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 100%;
+            background: #409EFF;
+            margin-right: 8px;
+        }
+        .d3{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            margin-top: -10px;
+            color: #606266;
+        }
+        .icon{
+            width: 24px;
+            margin-right: 5px;
+        }
+        .sl{
+            display: inline-block;
+            min-width: 80px;
+        }
+        .sl2{
+            display: inline-block;
+            min-width: 80px;
+        }
+        .sr{
+            white-space: nowrap;       /* 防止文本换行 */
+            overflow: hidden;          /* 隐藏溢出的内容 */
+            text-overflow: ellipsis;  /* 显示省略符号来代表被修剪的文本 */
+            color: #1890ff;
+            cursor: pointer;
+            flex: 1;
+            text-align: right;
+            margin-left: 20px;
+        }
+        .sr2{
+            white-space: nowrap;       /* 防止文本换行 */
+            overflow: hidden;          /* 隐藏溢出的内容 */
+            text-overflow: ellipsis;  /* 显示省略符号来代表被修剪的文本 */
+            cursor: pointer;
+            flex: 1;
+            text-align: right;
+            margin-left: 20px;
+        }
+        .cbz{
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+        }
+        .cbzsp1{
+            display: block;
+            width: 40%;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2; /* 限制文本显示为2行 */
+            overflow: hidden;
+        }
+        .cbzsp2{
+            display: block;
+            flex: 1;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2; /* 限制文本显示为2行 */
+            overflow: hidden;
+        }
+        .jt{
+            width: 25px;
+            margin: 0 20px;
+        }
+        .d3l{
+            flex: 1;
+            display: flex;
+            align-items: center;
+            
+        }
+        .d3ls{
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1; /* 限制文本显示为2行 */
+            overflow: hidden;
+            font-size: 15px;
+        }
+        .d3r{
+            width: 40%;
+            justify-content: right;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        .icon2{
+            width: 20px;
+            margin-right: 2px;
+        }
+        .d3rBox{
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+        .d3rBox2{
+            display: flex;
+            align-items: center;
+        }
+        .topBox{
+            position: relative;
+        }
+        .title{
+            position: absolute;
+            top: 120px;
+            padding: 0 40px;
+            font-size: 15px;
+        }
+        .sp{
+            color: red;
+            margin: 0 3px;
+        }
+        .sp1{
+            display: block;
+            margin-bottom: 6px;
+        }
+        .topImg{
+            height: 225px;
+        }
+        .wz{
+            display: inline-block;
+            width: 60px;
+        }
+        .kz{
+            display: inline-block;
+            min-width: 50px;
+            max-width: 80px;
+        }
+
+        /* PC端 */
+        .pcTop{
+            width: 100%;
+            /* height: 200px; */
+            background: #4680f9;
+            padding-top: 10px;
+        }
+        .pcTopT{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 56px;
+            padding: 0 20px;
+            border-bottom: 1px solid #DCDFE6;
+        }
+        .titTxt{
+            font-size: 20px;
+            color: #ffffff;
+        }
+        .dcBtn{
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        /* .dcBtn:hover{
+            border: 2px solid #4680f9;
+            color: #4680f9;
+        } */
+        .dcIco{
+            margin-right: 3px;
+        }
+        .pcMain{
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .pcMainT{
+            width: 100%;
+            height: 70px;
+            background: #4680f9;
+            position: absolute;
+            top: 0;
+        }
+        .pcMainC{
+            background: #ffffff;
+            width: 96%;
+            flex: 1;
+            overflow: auto;
+            /* position: relative;
+            top: -40px; */
+            border-radius: 5px;
+            z-index: 10;
+            margin: 20px 0;
+            margin-left: 2%;
+            padding: 20px;
+        }
+        .el-table{
+            font-size: 16px;
+        }
+        .is-leaf{
+            text-align: left;
+        }
+        .el-table_1_column_1,.el-table_1_column_10{
+            text-align: center;
+        }
+        .el-table__header-wrapper{
+            height: 36px;
+        }
+        .cell{
+            font-size: 16px;
+            color: #000000;
+        }
+        .el-table__row{
+            height: 60px;
+        }
+        .dz{
+            color: #1890ff;
+            cursor: pointer;
+        }
+        .d2Sp{
+            display: flex;
+            align-items: center;
+        }
+        .meImg{
+            width: 23px;
+            height: 23px;
+            border-radius: 100%;
+            margin-right: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- 内容区 -->
+        <div class="main" ref="scrollContainer">
+            <ul>
+                <li>
+                    <div class="d2">
+                        <span></span>
+                        <span style="color:#E6A23C">可疑外链</span>
+                    </div>
+                    <div class="d2">
+                        <span>账号名称 </span>
+                        <span class="d2Sp"><img :src="infoObj.mediaTypeImg" alt="" class="meImg">{{infoObj.accountName}}</span>
+                    </div>
+                    <div class="d2">
+                        <span class="sl2">外链链接</span>
+                        <span class="sr" @click.stop="dzChange(infoObj.url)">{{infoObj.url}}</span>
+                    </div>
+                    <div class="d2">
+                        <span class="sl">外链类型</span>
+                        <span>{{infoObj.errorTypesText}}</span>
+                    </div>
+                    <div class="d2">
+                        <span class="sl">资源类型</span>
+                        <span>{{infoObj.contentTypeText}}</span>
+                    </div>
+                    <div class="d2">
+                        <span class="sl2">父页面信息</span>
+                        <span class="sr" @click.stop="dzChange(infoObj.fromUrl)">{{infoObj.fromTitle}}</span>
+                    </div>
+                    <div class="d2">
+                        <span class="sl">发现时间</span>
+                        <span>{{infoObj.auditTime}}</span>
+                    </div>
+                    <!-- <div class="d2">
+                        <span class="kz">快照</span>
+                        <span><img src="../images/warn/kz.png" alt="" class="icon2" @click.stop="dzChange(infoObj.snapshotPath)"></span>
+                    </div> -->
+                    <div class="d2">
+                        <span class="kz">一键复制</span>
+                        <span><img src="../images/warn/copy.png" alt="" class="icon2" @click.stop="copyChange(infoObj)"></span>
+                    </div>
+                    
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        // 创建Vue实例
+        new Vue({
+            el: '#app',
+            data: {
+                infoObj: {},
+                
+            },
+            created () {
+                this.fetchData();
+            },
+            mounted() {
+                
+            },
+            methods: {
+                // 复制
+                copyChange(val){
+                    // if(!this.dragging){
+                    //     alert('已复制')
+                    //     navigator.clipboard.writeText(val);
+                    // }
+                    // window.open(val)
+                    console.log(val,'val')
+                    this.textToCopy = `
+                        账号名称：${val.accountName}
+                        外链链接：${val.url}
+                        资源类型：${val.contentTypeText}
+                        父页面信息：${val.fromTitle}
+                        ${val.fromUrl}  
+                    `;
+                    const textArea = document.createElement('textarea');
+                    textArea.value = this.textToCopy;
+                    textArea.style.position = 'fixed'; // 防止页面滚动时出现
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    try {
+                        const successful = document.execCommand('copy');
+                        if (successful) {
+                            alert('已复制');
+                        } else {
+                            alert('无法复制');
+                        }
+                    } catch (err) {
+                        console.error('无法复制文本: ', err);
+                    }
+                    document.body.removeChild(textArea);
+                },
+                // 地址超链接
+                dzChange(url){
+                    if(url != null){
+                        window.location.href = url;
+                    }
+                },
+                // 获取data参数
+                getQueryParam(param) {
+                    var regex = new RegExp('[?&]' + param + '(=([^&#]*)|&|#|$)');
+                    var results = regex.exec(window.location.href);
+                    if (!results) return null;
+                    if (!results[2]) return '';
+                    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+                },
+                // /biz/warnPageDetail/warnRoute
+                /** 源数据*/
+                async fetchData() {
+                    let ym = null;
+                    ym = 'http://t-inspect-1.zh-hongyu.cn:80';
+                    // ym = 'http://back.puchayun.com.cn';
+                    // ym = window.location.protocol+window.location.host;
+                    try {
+                        var data = {
+                            // "searchId":"6VvIWdUm"
+                            "idStr": this.getQueryParam('id'),
+                            // "idStr": '66c85164d197ae6b3cda880c'
+                        }
+                        // const res = await fetch('http://192.168.0.4:8081/apiSnap/correction/location', {
+                        const res = await fetch('/biz/warnPageDetail/mediaExternalInfo', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
+                        });
+                        if (!res.ok) {}
+                        const httpDate = await res.json();
+                        console.log(httpDate.data)
+                        this.infoObj = httpDate.data;
+                        if(!this.infoObj.fromTitles){
+                            this.infoObj.fromTitles = '--';
+                        }
+                        if(!this.infoObj.filePath){
+                            this.infoObj.filePath = '--';
+                        }
+                        if(this.infoObj.mediaType == 1){ // 微信
+                            this.infoObj.mediaTypeImg = '../images/warn/wx.jpeg';
+                        }else if(this.infoObj.mediaType == 2){ // 微博
+                            this.infoObj.mediaTypeImg = '../images/warn/wb.jpeg';
+                        }else if(this.infoObj.mediaType == 3){ // 抖音
+                            this.infoObj.mediaTypeImg = '../images/warn/dy.jpeg';
+                        }else if(this.infoObj.mediaType == 4){ // 头条
+                            this.infoObj.mediaTypeImg = '../images/warn/tt.jpeg';
+                        }else if(this.infoObj.mediaType == 5){ // 快手
+                            this.infoObj.mediaTypeImg = '../images/warn/ks.jpeg';
+                        }else{ // 其他
+                            this.dateList[i].appTypeImg = '../images/warn/qt.png';
+                        }
+
+                    } catch (error) {
+                        this.loading = false;
+                    }
+                },
+            },
+        
+        });
+    </script>
+</body>
+</html>

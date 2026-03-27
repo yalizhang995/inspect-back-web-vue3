@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>错敏隐私</title>
+    <script src="https://cdn.tailwindcss.com/3.3.3"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.15.6/lib/theme-chalk/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui@2.4.11/lib/index.js"></script>
+    <style>
+        #app{
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .main{
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* 在iOS上启用平滑滚动 */
+        }
+        ul{
+            margin-bottom: 20px;
+        }
+        li{
+            background: #ffffff;
+            padding-top: 10px;
+            margin-top: 15px;
+        }
+        .d1{
+            color: #606266;
+            margin: 5px 0;
+            padding: 0 15px;
+            display: flex;
+        }
+        .d2{
+            color: #606266;
+            margin: 5px 0;
+            padding: 0 15px;
+            display: flex;
+        }
+        .d3{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #DCDFE6;
+            padding: 10px 15px;
+            margin-top: 10px;
+        }
+        .icon{
+            width: 24px;
+            margin-right: 5px;
+            border-radius: 100%;
+        }
+        .sl{
+            display: inline-block;
+            min-width: 80px;
+        }
+        .sl2{
+            display: inline-block;
+            min-width: 100px;
+        }
+        .sr{
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1; /* 限制文本显示为2行 */
+            overflow: hidden;
+            color: #1890ff;
+            cursor: pointer;
+        }
+        .cbz{
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+        }
+        .cbzsp1{
+            display: block;
+            width: 40%;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2; /* 限制文本显示为2行 */
+            overflow: hidden;
+        }
+        .cbzsp2{
+            display: block;
+            flex: 1;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2; /* 限制文本显示为2行 */
+            overflow: hidden;
+        }
+        .jt{
+            width: 25px;
+            margin: 0 20px;
+        }
+        .d3l{
+            flex: 1;
+            display: flex;
+            align-items: center;
+            
+        }
+        .d3ls{
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1; /* 限制文本显示为2行 */
+            overflow: hidden;
+            font-size: 15px;
+        }
+        .d3r{
+            width: 40%;
+            justify-content: right;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        .icon2{
+            width: 15px;
+            margin-right: 2px;
+        }
+        .d3rBox{
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+        .d3rBox2{
+            display: flex;
+            align-items: center;
+        }
+        .topBox{
+            position: relative;
+        }
+        .title{
+            position: absolute;
+            top: 120px;
+            padding: 0 40px;
+            font-size: 15px;
+        }
+        .sp{
+            color: red;
+            margin: 0 3px;
+        }
+        .sp1{
+            display: block;
+            margin-bottom: 6px;
+        }
+        .topImg{
+            height: 225px;
+        }
+        .wz{
+            display: inline-block;
+            width: 60px;
+        }
+        .kz{
+            display: inline-block;
+            width: 30px;
+        }
+
+        /* PC端 */
+        .pcTop{
+            width: 100%;
+            /* height: 200px; */
+            background: #4680f9;
+            padding-top: 10px;
+        }
+        .pcTopT{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 56px;
+            padding: 0 20px;
+            border-bottom: 1px solid #DCDFE6;
+        }
+        .titTxt{
+            font-size: 20px;
+            color: #ffffff;
+        }
+        .dcBtn{
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        /* .dcBtn:hover{
+            border: 2px solid #4680f9;
+            color: #4680f9;
+        } */
+        .dcIco{
+            margin-right: 3px;
+        }
+        .pcMain{
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .pcMainT{
+            width: 100%;
+            height: 70px;
+            background: #4680f9;
+            position: absolute;
+            top: 0;
+        }
+        .pcMainC{
+            background: #ffffff;
+            width: 96%;
+            flex: 1;
+            overflow: auto;
+            /* position: relative;
+            top: -40px; */
+            border-radius: 5px;
+            z-index: 10;
+            margin: 20px 0;
+            margin-left: 2%;
+            padding: 20px;
+        }
+        .el-table{
+            font-size: 16px;
+        }
+        .is-leaf{
+            text-align: left;
+        }
+        .el-table_1_column_1,.el-table_1_column_7,.el-table_1_column_10{
+            text-align: center;
+        }
+        .el-table__header-wrapper{
+            height: 36px;
+        }
+        .cell{
+            font-size: 16px;
+            color: #000000;
+        }
+        .el-table__row{
+            height: 60px;
+        }
+        .dz{
+            color: #1890ff;
+            cursor: pointer;
+        }
+        .bsm{
+            display: flex;
+            align-items: center;
+        }
+        .bsmIco{
+            width: 20px;
+            margin-right: 5px;
+            border-radius: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- 移动端 -->
+        <!-- <div v-if="isMobileType == 2"> -->
+            <!-- 顶部 -->
+            <div class="topBox" v-if="isMobileType == 2">
+                <img src="../images/warn/topImg2.png" alt="" style="width:100%" class="topImg">
+                <div class="title">
+                    <span class="sp1">尊敬的客户，您好！</span>
+                    <span>【普查云监管】发现存在<span class="sp">{{total}}</span>条<span class="sp">{{title}}</span>问题，请及时处理。</span>
+                </div>
+            </div>
+                
+            <!-- 内容区 -->
+            <div class="main" v-if="isMobileType == 2" @scroll="handleScroll" ref="scrollContainer">
+                <ul>
+                    <li v-for="(item,index) in dateList" :key="index">
+                        <div class="cbz">
+                            <span class="cbzsp1">{{item.triggerWord}}</span>
+                            <span class="jt"><img src="../images/warn/jt.png" alt=""></span>
+                            <span class="cbzsp2">{{item.suggestWord}}</span>
+                        </div>
+                        <div class="d2">
+                                <span class="sl">问题类型：</span>
+                                <span>{{item.type}}</span>
+                            </div>
+                        <div class="d2">
+                            <span class="sl2">父页面信息：</span>
+                            <span class="sr" @click="dzChange(item.fromUrl)">{{item.fromTitle}}</span>
+                        </div>
+                        <div class="d1">
+                                <span class="sl2">所在上下文：</span>
+                                <!-- <span class="sr2">{{item.sentence}}</span> -->
+                                <span class="sr2">
+                                    <span>{{item.wordLeft}}</span>
+                                    <span style="color: red">{{item.triggerWord}}</span>
+                                    <span>{{item.wordRight}}</span>
+                                </span>
+                            </div>
+                        <div class="d2">
+                            <span class="sl">发现时间：</span>
+                            <span>{{item.createTime}}</span>
+                        </div>
+                        <div class="d3">
+                            <div class="d3l">
+                                <span><img :src="item.ico" alt="" class="icon"></span>
+                                <!-- <span class="d3ls" v-if="item.customerType == 1">{{item.siteName}}</span>
+                                <span class="d3ls" v-else>{{item.reportingUnitName}}</span> -->
+                                <span class="d3ls">{{item.accountName}}</span>
+                            </div>
+                            <div class="d3r">
+                                <div class="d3rBox">
+                                    <span><img src="../images/warn/lj.png" alt="" class="icon2"></span>
+                                    <span @click="dzChange(item.ul)" class="wz">所在文章</span>
+                                </div>
+                                <!-- <div class="d3rBox2">
+                                    <span><img src="../images/warn/kz.png" alt="" class="icon2"></span>
+                                    <span @click="dzChange(item.snapshotPath)" class="kz">快照</span>
+                                </div> -->
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        <!-- </div> -->
+        <!-- PC端 -->
+        <!-- <div v-if="isMobileType == 1"> -->
+            <div class="pcTop" v-if="isMobileType == 1">
+                <div class="pcTopT">
+                    <div class="titTxt">普查云监管</div>
+                    <div class="dcBtn" @click="ecportChange">
+                        <i class="el-icon-bottom dcIco"></i>
+                        <span>全部导出</span>
+                    </div>
+                </div>
+            </div>
+            <div class="pcMain" v-if="isMobileType == 1">
+                <div class="pcMainC" @scroll="handleScrollPC" ref="container">
+                    <el-table
+                        :data="dateList"
+                    >   
+                        <el-table-column prop="index" label="序号" width="60" ></el-table-column>
+                        <el-table-column label="问题类型"  prop="type" min-width="140"></el-table-column>
+                        <el-table-column label="错敏词"  prop="triggerWord" min-width="200" show-overflow-tooltip></el-table-column>
+                        <el-table-column label="推荐词"  prop="suggestWord" min-width="200" show-overflow-tooltip></el-table-column>
+                        <el-table-column label="所在上下文"  prop="createTime" min-width="300">
+                            <template slot-scope="scope">
+                                <span v-if="scope.row.sentence">
+                                    <span>{{scope.row.wordLeft}}</span>
+                                    <span style="color:red;borderBottom:1px solid red">{{scope.row.triggerWord}}</span>
+                                    <span>{{scope.row.wordRight}}</span>
+                                </span>
+                                <span v-if="!scope.row.sentence">--</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="所在文章"  prop="reportingUnitName" min-width="240" show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <span class="dz" @click="dzChange2(scope.row.ul)">{{ scope.row.title}}</span>
+                            </template>
+                        </el-table-column>
+                        <!-- <el-table-column label="快照"  prop="siteName" min-width="80">
+                            <template slot-scope="scope">
+                                <el-button icon="el-icon-camera-solid" type="text" :disabled="!scope.row.snapshotPath" style="font-size:20px" @click="dzChange2(scope.row.snapshotPath)"></el-button>
+                            </template>
+                        </el-table-column> -->
+                        <el-table-column label="父页面信息"  prop="reportingUnitName" min-width="240" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                   <span class="dz" @click="dzChange2(scope.row.fromUrl)">{{ scope.row.fromTitle}}</span>
+                                </template>
+                            </el-table-column>
+                        <el-table-column label="发现时间"  prop="createTime" min-width="180"></el-table-column>
+                        <el-table-column label="平台"  prop="appTypeName" min-width="100"></el-table-column>
+                        <el-table-column label="账号信息"  prop="accountName" min-width="260" show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <div class="bsm">
+                                    <img :src="scope.row.ico" alt="" class="bsmIco">
+                                    <span>{{scope.row.accountName}}</span>
+                                </div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="新媒体标识码"  prop="siteCodeMedia" min-width="190"></el-table-column>
+                    </el-table>
+                </div>
+                <div class="pcMainT"></div>
+            </div>
+        <!-- </div> -->
+    </div>
+    <script>
+        // 创建Vue实例
+        new Vue({
+            el: '#app',
+            data: {
+                dateList: [],
+                title: null,
+                isMobileType: null, // 1.pc端 2.移动端H5
+                pgNum: 1,
+                total: 0,
+                hasTriggered: false // 防止重复触发
+                
+            },
+            created () {
+                // 使用
+                if (this.isMobile()) {
+                    console.log('这是移动设备');
+                    this.isMobileType = 2;
+                    this.fetchData(1,10);
+                } else {
+                    console.log('这是PC端');
+                    this.isMobileType = 1;
+                    this.fetchData(1,20);
+                }
+            },
+            mounted() {
+                
+            },
+            methods: {
+                handleScroll() {
+                    const container = this.$refs.scrollContainer;
+                    const scrollHeight = container.scrollHeight;
+                    const scrollTop = container.scrollTop;
+                    const clientHeight = container.clientHeight;
+                    // 判断是否滚动到底部
+                    if (scrollTop + clientHeight >= scrollHeight - 10) { // 10是缓冲值
+                        console.log(this.dateList.length)
+                        console.log(this.total)
+                        if(this.dateList.length < this.total){
+                            this.pgNum++;
+                            console.log(this.pgNum)
+                            this.fetchData(this.pgNum,10)
+                        }
+                        
+                    }
+                },
+                handleScrollPC(){
+                    const container = this.$refs.container;
+                    // 判断是否滚动到底部
+                    const isBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 10;
+                    console.log(isBottom,'123')
+                    if(isBottom && !this.hasTriggered){
+                        console.log(this.dateList,'asdasdasdas')
+                        if(this.dateList.length < this.total){
+                            this.pgNum++;
+                            console.log(this.pgNum)
+                            this.fetchData(this.pgNum,20)
+                            this.hasTriggered = true;
+                            // .5秒后允许再次触发
+                            setTimeout(() => {
+                                this.hasTriggered = false;
+                            }, 500);
+                        }
+                        
+                    }
+                    
+                },
+                isMobile() {
+                    const userAgent = navigator.userAgent.toLowerCase();
+                    return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+                },
+                // 地址超链接
+                dzChange(url){
+                    if(url != null){
+                        window.location.href = url;
+                    }
+                },
+                // 地址超链接
+                dzChange2(url){
+                    if(url != null){
+                        window.open(url);
+                    }
+                },
+                // 获取data参数
+                getQueryParam(param) {
+                    var regex = new RegExp('[?&]' + param + '(=([^&#]*)|&|#|$)');
+                    var results = regex.exec(window.location.href);
+                    if (!results) return null;
+                    if (!results[2]) return '';
+                    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+                },
+                /** 导出*/
+                // 全部导出
+                ecportChange(){
+                    this.ecport();
+                },
+                downloadFromStream(stream, filename) {
+                    // 将流转换为 Blob
+                    const blob = new Blob([stream], { type: 'application/octet-stream' });
+
+                    // 创建一个临时 URL
+                    const url = URL.createObjectURL(blob);
+
+                    // 创建一个下载链接并模拟点击
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename || 'download'; // 默认文件名
+                    document.body.appendChild(a);
+                    a.click();
+
+                    // 清理资源
+                    setTimeout(() => {
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    }, 0);
+                },
+                async ecport() {
+                    let ym = null;
+                    // ym = 'http://t-inspect-1.zh-hongyu.cn:80';
+                    // // ym = 'http://back.puchayun.com.cn';
+                    ym = window.location.protocol+window.location.host
+                    var data = {
+                            // "searchId":"6VvIWdUm"
+                            "searchId": this.getQueryParam('id')
+                        }
+                    fetch('/biz/warnPageDetail/export',{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => response.blob())
+                    .then(blob => {
+                        this.downloadFromStream(blob, '错敏隐私.xlsx');
+                    })
+                    .catch(error => console.error('下载失败:', error));
+                },
+                // /biz/warnPageDetail/warnRoute
+                /** 源数据*/
+                async fetchData(pgNum,pgSize) {
+                    let ym = null;
+                    ym = 'http://t-inspect-1.zh-hongyu.cn:80';
+                    // ym = 'http://back.puchayun.com.cn';
+                    // ym = window.location.protocol+window.location.host;
+                    try {
+                        var data = {
+                            // "searchId":"6VvIWdUm"
+                            "searchId": this.getQueryParam('id'),
+                            'pgNum': pgNum,
+                            'pgSize': pgSize,
+                        }
+                        // const res = await fetch('http://192.168.0.4:8081/apiSnap/correction/location', {
+                        const res = await fetch('/biz/warnPageDetail/list', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
+                        });
+                        if (!res.ok) {}
+                        const httpDate = await res.json();
+                        this.total = httpDate.total;
+                        console.log(httpDate.rows)
+                        if(pgNum > 1 && this.dateList.length < this.total && httpDate.rows.length != 0){
+                            this.dateList = this.dateList.concat(httpDate.rows)
+                        }else{
+                            this.dateList = httpDate.rows;
+                        }
+                        console.log(this.dateList,'列表数据')
+                        if(this.dateList[0].warnType == '102' || this.dateList[0].warnType == 102){ // 错误内容
+                            this.title = '错误内容'
+                        }else if(this.dateList[0].warnType == '103' || this.dateList[0].warnType == 103){ // 敏感信息
+                            this.title = '敏感信息'
+                        }else if(this.dateList[0].warnType == '104' || this.dateList[0].warnType == 104){ // 隐私泄露
+                            this.title = '隐私泄露'
+                        }
+                        for(var i in this.dateList){
+                            this.dateList[i].index = parseInt(i)+1;
+                            // 上下文
+                            this.dateList[i].wordLeft = this.dateList[i].sentence.split(this.dateList[i].triggerWord)[0];
+                            this.dateList[i].wordRight = this.dateList[i].sentence.split(this.dateList[i].triggerWord)[1];
+                            // 网站icon
+                            if(this.dateList[i].appTypeName != '网站'){
+                                if(this.dateList[i].appType == 1){
+                                    this.dateList[i].ico = '../images/warn/wx.jpeg';
+                                }else if(this.dateList[i].appType == 2){
+                                    this.dateList[i].ico = '../images/warn/wb.jpeg';
+                                }else if(this.dateList[i].appType == 3){
+                                    this.dateList[i].ico = '../images/warn/dy.jpeg';
+                                }else if(this.dateList[i].appType == 4){
+                                    this.dateList[i].ico = '../images/warn/tt.jpeg';
+                                }else if(this.dateList[i].appType == 5){
+                                    this.dateList[i].ico = '../images/warn/ks.jpeg';
+                                }else {
+                                    this.dateList[i].ico = '../images/warn/qt.png';
+                                }
+                            }else{
+                                this.dateList[i].ico = '../images/warn/wzIco.png';
+                            }
+                            if(!this.dateList[i].fromTitle && !this.dateList[i].fromUrl){
+                                this.dateList[i].fromTitle = '--';
+                            }else if(!this.dateList[i].fromTitle){
+                                this.dateList[i].fromTitle = this.dateList[i].fromUrl;
+                            }else{
+                                this.dateList[i].fromTitle = this.dateList[i].fromTitle;
+                            }
+                        }
+                        console.log(this.dateList,'this.dateList')
+                        
+                        
+                    } catch (error) {
+                        this.loading = false;
+                    }
+                },
+            },
+        
+        });
+    </script>
+</body>
+</html>
