@@ -1,102 +1,79 @@
-import Vue from 'vue'
-
+import { createApp } from 'vue'
+import mitt from 'mitt'
 import Cookies from 'js-cookie'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 
-import Element from 'element-ui'
-import './assets/styles/element-variables.scss'
-
-import '@/assets/styles/index.scss' // global css
-import '@/assets/styles/ruoyi.scss' // ruoyi css
-import App from './App'
+import '@/assets/styles/index.scss'
+import '@/assets/styles/ruoyi.scss'
+import App from './App.vue'
 import store from './store'
 import router from './router'
-import directive from './directive' // directive
-import plugins from './plugins' // plugins
-import { download,download2 } from '@/utils/request'
+import directive from './directive'
+import plugins from './plugins'
+import { download, download2 } from '@/utils/request'
 
-import './assets/icons' // icon
-import './permission' // permission control
-import { getDicts } from "@/api/system/dict/data";
-import { getConfigKey } from "@/api/system/config";
-import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree, formatToScientificNotation, linkChange } from "@/utils/ruoyi";
-// 分页组件
-import Pagination from "@/components/Pagination";
-// 自定义表格工具组件
-import RightToolbar from "@/components/RightToolbar"
-import upHeight from "@/components/RightToolbar/upHeight"
-// 富文本组件
-import Editor from "@/components/Editor"
-// 文件上传组件
-import FileUpload from "@/components/FileUpload"
-// 图片上传组件
-import ImageUpload from "@/components/ImageUpload"
-// 图片预览组件
-import ImagePreview from "@/components/ImagePreview"
-// 字典标签组件
+import registerIcons from './assets/icons'
+import './permission'
+import { getDicts } from '@/api/system/dict/data'
+import { getConfigKey } from '@/api/system/config'
+import {
+  parseTime,
+  resetForm,
+  addDateRange,
+  selectDictLabel,
+  selectDictLabels,
+  handleTree,
+  formatToScientificNotation,
+  linkChange
+} from '@/utils/ruoyi'
+import Pagination from '@/components/Pagination'
+import RightToolbar from '@/components/RightToolbar'
+import upHeight from '@/components/RightToolbar/upHeight'
+import Editor from '@/components/Editor'
+import FileUpload from '@/components/FileUpload'
+import ImageUpload from '@/components/ImageUpload'
+import ImagePreview from '@/components/ImagePreview'
 import DictTag from '@/components/DictTag'
-// 头部标签组件
-import VueMeta from 'vue-meta'
-// 字典数据组件
 import DictData from '@/components/DictData'
-Vue.prototype.$EventBus = new Vue();
-
-
-// 全局方法挂载
-Vue.prototype.getDicts = getDicts
-Vue.prototype.getConfigKey = getConfigKey
-Vue.prototype.parseTime = parseTime
-Vue.prototype.resetForm = resetForm
-Vue.prototype.addDateRange = addDateRange
-Vue.prototype.selectDictLabel = selectDictLabel
-Vue.prototype.selectDictLabels = selectDictLabels
-Vue.prototype.download = download
-Vue.prototype.download2 = download2
-
-Vue.prototype.handleTree = handleTree
-Vue.prototype.formatToScientificNotation = formatToScientificNotation
-Vue.prototype.linkChange = linkChange
-
-
-// 全局组件挂载
-Vue.component('DictTag', DictTag)
-Vue.component('Pagination', Pagination)
-Vue.component('RightToolbar', RightToolbar)
-Vue.component('upHeight', upHeight)
-Vue.component('Editor', Editor)
-Vue.component('FileUpload', FileUpload)
-Vue.component('ImageUpload', ImageUpload)
-Vue.component('ImagePreview', ImagePreview)
-
 import Viewer from 'v-viewer'
 import 'viewerjs/dist/viewer.css'
 
-Vue.use(Viewer)
+const app = createApp(App)
 
-Vue.use(directive)
-Vue.use(plugins)
-Vue.use(VueMeta)
-DictData.install()
+app.config.globalProperties.$EventBus = mitt()
+app.config.globalProperties.getDicts = getDicts
+app.config.globalProperties.getConfigKey = getConfigKey
+app.config.globalProperties.parseTime = parseTime
+app.config.globalProperties.resetForm = resetForm
+app.config.globalProperties.addDateRange = addDateRange
+app.config.globalProperties.selectDictLabel = selectDictLabel
+app.config.globalProperties.selectDictLabels = selectDictLabels
+app.config.globalProperties.download = download
+app.config.globalProperties.download2 = download2
+app.config.globalProperties.handleTree = handleTree
+app.config.globalProperties.formatToScientificNotation = formatToScientificNotation
+app.config.globalProperties.linkChange = linkChange
 
+app.component('DictTag', DictTag)
+app.component('Pagination', Pagination)
+app.component('RightToolbar', RightToolbar)
+app.component('upHeight', upHeight)
+app.component('Editor', Editor)
+app.component('FileUpload', FileUpload)
+app.component('ImageUpload', ImageUpload)
+app.component('ImagePreview', ImagePreview)
+registerIcons(app)
 
+app.use(Viewer)
+app.use(directive)
+app.use(plugins)
+DictData.install(app)
 
-/**
- * If you don't want to use mock-server
- * you want to use MockJs for mock api
- * you can execute: mockXHR()
- *
- * Currently MockJs will be used in the production environment,
- * please remove it before going online! ! !
- */
-
-Vue.use(Element, {
-  size: Cookies.get('size') || 'medium' // set element-ui default size
+app.use(ElementPlus, {
+  size: Cookies.get('size') || 'medium'
 })
 
-Vue.config.productionTip = false
-
-new Vue({
-  el: '#app',
-  router,
-  store,
-  render: h => h(App)
-})
+app.use(store)
+app.use(router)
+app.mount('#app')

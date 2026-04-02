@@ -333,7 +333,7 @@ export default {
             this.getList();
         }
     },
-    beforeDestroy() {
+    beforeUnmount() {
         // 清理缓存的代码
         sessionStorage.removeItem('warnFailSendLogId');
     },

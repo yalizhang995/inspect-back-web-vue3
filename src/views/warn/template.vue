@@ -19,7 +19,7 @@ export default {
     created() {
         this.getWarnRouteFn();
     },
-    beforeDestroy() {
+    beforeUnmount() {
         
     },
     methods: {

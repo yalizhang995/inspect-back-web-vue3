@@ -83,7 +83,7 @@ export default {
         let id = sessionStorage.getItem('homePageUpdateId');
         this.getList(id);
     },
-    beforeDestroy() {
+    beforeUnmount() {
         // 清理缓存的代码
         sessionStorage.removeItem('homePageUpdateId');
     },

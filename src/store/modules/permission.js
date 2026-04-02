@@ -39,8 +39,8 @@ const permission = {
           const sidebarRoutes = filterAsyncRouter(sdata)
           const rewriteRoutes = filterAsyncRouter(rdata, false, true)
           const asyncRoutes = filterDynamicRoutes(dynamicRoutes);
-          rewriteRoutes.push({ path: '*', redirect: '/404', hidden: true })
-          router.addRoutes(asyncRoutes);
+          rewriteRoutes.push({ path: '/:pathMatch(.*)*', redirect: '/404', hidden: true })
+          appendRoutes(asyncRoutes)
           commit('SET_ROUTES', rewriteRoutes)
           commit('SET_SIDEBAR_ROUTERS', constantRoutes.concat(sidebarRoutes))
           commit('SET_DEFAULT_ROUTES', sidebarRoutes)
@@ -52,6 +52,12 @@ const permission = {
   }
 }
 
+
+function appendRoutes(routes = []) {
+  routes.forEach((route) => {
+    router.addRoute(route)
+  })
+}
 // 遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false) {
   return asyncRouterMap.filter(route => {
@@ -125,13 +131,15 @@ export function filterDynamicRoutes(routes) {
   return res
 }
 
+const viewModules = import.meta.glob('/src/views/**/*.vue')
+
 export const loadView = (view) => {
-  if (process.env.NODE_ENV === 'development') {
-    return (resolve) => require([`@/views/${view}`], resolve)
-  } else {
-    // 使用 import 实现生产环境的路由懒加载
-    return () => import(`@/views/${view}`)
+  const matchKey = `/src/views/${view}.vue`
+  const loader = viewModules[matchKey]
+  if (loader) {
+    return loader
   }
+  return () => Promise.reject(new Error(`未找到页面组件: ${matchKey}`))
 }
 
 export default permission

@@ -5,7 +5,7 @@
 
 import Clipboard from 'clipboard'
 export default {
-  bind(el, binding, vnode) {
+  beforeMount(el, binding) {
     switch (binding.arg) {
       case 'success':
         el._vClipBoard_success = binding.value;
@@ -40,8 +40,8 @@ export default {
       el._vClipBoard.action = () => binding.arg === 'cut' ? 'cut' : 'copy';
     }
   },
-  unbind(el, binding) {
-    if (!el._vClipboard) return
+  unmounted(el, binding) {
+    if (!el._vClipBoard) return
     if (binding.arg === 'success') {
       delete el._vClipBoard_success;
     } else if (binding.arg === 'error') {

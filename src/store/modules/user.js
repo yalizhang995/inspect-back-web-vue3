@@ -1,5 +1,6 @@
 import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import defaultAvatar from '@/assets/images/profile.jpg'
 
 const user = {
   state: {
@@ -56,7 +57,7 @@ const user = {
         getInfo().then(res => {
           const user = res.user;
           sessionStorage.setItem("loginInfoObj", JSON.stringify(user));
-          const avatar = (user.avatar == "" || user.avatar == null) ? require("@/assets/images/profile.jpg") : process.env.VUE_APP_BASE_API + user.avatar;
+          const avatar = (user.avatar == "" || user.avatar == null) ? defaultAvatar : process.env.VUE_APP_BASE_API + user.avatar;
           if (res.roles && res.roles.length > 0) { // 验证返回的roles是否是一个非空数组
             commit('SET_ROLES', res.roles)
             commit('SET_PERMISSIONS', res.permissions)

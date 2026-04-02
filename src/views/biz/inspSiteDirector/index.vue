@@ -364,7 +364,7 @@ export default {
         }
         this.getInspSiteTree();
     },
-    beforeDestroy() {
+    beforeUnmount() {
         // 清理缓存的代码
         sessionStorage.removeItem('siteCode');
     },

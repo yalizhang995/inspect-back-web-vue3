@@ -675,17 +675,17 @@ export default {
                 this.mediaSiteNames = this.editObj.siteMediaSites;   
                 for(var j in this.mediaSiteNames){
                     if(this.mediaSiteNames[j].appType == 1){
-                        this.mediaSiteNames[j].ico = require('../../../assets/images/wx.jpeg')
+                        this.mediaSiteNames[j].ico = new URL('../../../assets/images/wx.jpeg', import.meta.url).href
                     }else if(this.mediaSiteNames[j].appType == 2){
-                        this.mediaSiteNames[j].ico = require('../../../assets/images/wb.jpeg')
+                        this.mediaSiteNames[j].ico = new URL('../../../assets/images/wb.jpeg', import.meta.url).href
                     }else if(this.mediaSiteNames[j].appType == 3){
-                        this.mediaSiteNames[j].ico = require('../../../assets/images/dy.jpeg')
+                        this.mediaSiteNames[j].ico = new URL('../../../assets/images/dy.jpeg', import.meta.url).href
                     }else if(this.mediaSiteNames[j].appType == 4){
-                        this.mediaSiteNames[j].ico = require('../../../assets/images/tt.jpeg')
+                        this.mediaSiteNames[j].ico = new URL('../../../assets/images/tt.jpeg', import.meta.url).href
                     }else if(this.mediaSiteNames[j].appType == 5){
-                        this.mediaSiteNames[j].ico = require('../../../assets/images/ks.jpeg')
+                        this.mediaSiteNames[j].ico = new URL('../../../assets/images/ks.jpeg', import.meta.url).href
                     }else {
-                        this.mediaSiteNames[j].ico = require('../../../assets/images/qt.png')
+                        this.mediaSiteNames[j].ico = new URL('../../../assets/images/qt.png', import.meta.url).href
                     }
                 }    
             }
@@ -1345,17 +1345,17 @@ export default {
                         }
                     }
                     if(response.rows[i].appType == 1){
-                        response.rows[i].ico = require('../../../assets/images/wx.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/wx.jpeg', import.meta.url).href
                     }else if(response.rows[i].appType == 2){
-                        response.rows[i].ico = require('../../../assets/images/wb.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/wb.jpeg', import.meta.url).href
                     }else if(response.rows[i].appType == 3){
-                        response.rows[i].ico = require('../../../assets/images/dy.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/dy.jpeg', import.meta.url).href
                     }else if(response.rows[i].appType == 4){
-                        response.rows[i].ico = require('../../../assets/images/tt.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/tt.jpeg', import.meta.url).href
                     }else if(response.rows[i].appType == 5){
-                        response.rows[i].ico = require('../../../assets/images/ks.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/ks.jpeg', import.meta.url).href
                     }else {
-                        response.rows[i].ico = require('../../../assets/images/qt.png')
+                        response.rows[i].ico = new URL('../../../assets/images/qt.png', import.meta.url).href
                     }
                 }
                 if(type == 1){
