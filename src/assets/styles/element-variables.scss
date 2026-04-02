@@ -1,31 +1,16 @@
 /**
-* I think element-ui's default theme color is too light for long-term use.
-* So I modified the default color and you can modify it to your liking.
-**/
+ * Element Plus theme bridge.
+ *
+ * NOTE:
+ * - Vue3 版本已切换到 element-plus。
+ * - 旧版 element-ui 变量入口已移除，避免误引入导致构建失败。
+ * - 主题主色请通过 CSS 变量 `--el-color-primary`（ThemePicker）动态设置。
+ */
 
-/* theme color */
-$--color-primary: #1890ff;
-$--color-success: #13ce66;
-$--color-warning: #ffba00;
-$--color-danger: #ff4949;
-// $--color-info: #1E1E1E;
+:root {
+  --el-color-primary: #1890ff;
+}
 
-$--button-font-weight: 400;
-
-// $--color-text-regular: #1f2d3d;
-
-$--border-color-light: #dfe4ed;
-$--border-color-lighter: #e6ebf5;
-
-$--table-border: 1px solid #dfe6ec;
-
-/* icon font path, required */
-$--font-path: '~element-ui/lib/theme-chalk/fonts';
-
-@import "~element-ui/packages/theme-chalk/src/index";
-
-// the :export directive is the magic sauce for webpack
-// https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
 :export {
-  theme: $--color-primary;
+  theme: #1890ff;
 }

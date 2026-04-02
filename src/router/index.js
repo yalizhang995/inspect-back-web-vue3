@@ -1,7 +1,4 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-
-Vue.use(Router)
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 /* Layout */
 import Layout from '@/layout'
@@ -36,7 +33,7 @@ export const constantRoutes = [
         hidden: true,
         children: [
             {
-                path: '/redirect/:path(.*)',
+                path: '/redirect/:pathMatch(.*)*',
                 component: () => import('@/views/redirect')
             }
         ]
@@ -459,20 +456,15 @@ export const dynamicRoutes = [
     // },
 ]
 
-// 防止连续点击多次路由报错
-let routerPush = Router.prototype.push;
-let routerReplace = Router.prototype.replace;
-// push
-Router.prototype.push = function push(location) {
-    return routerPush.call(this, location).catch(err => err)
-}
-// replace
-Router.prototype.replace = function push(location) {
-    return routerReplace.call(this, location).catch(err => err)
-}
-
-export default new Router({
-    mode: 'hash', // 去掉url中的#
+const router = createRouter({
+    history: createWebHashHistory(),
     scrollBehavior: () => ({ y: 0 }),
     routes: constantRoutes
 })
+
+const originalPush = router.push
+router.push = (to) => originalPush(to).catch((err) => err)
+const originalReplace = router.replace
+router.replace = (to) => originalReplace(to).catch((err) => err)
+
+export default router

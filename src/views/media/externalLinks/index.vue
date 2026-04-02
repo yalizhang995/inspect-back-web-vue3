@@ -1762,41 +1762,41 @@ export default {
                     }
 
                     if(response.rows[i].mediaType == 1){
-                        response.rows[i].ico = require('../../../assets/images/wx.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/wx.jpeg', import.meta.url).href
                     }else if(response.rows[i].mediaType == 2){
-                        response.rows[i].ico = require('../../../assets/images/wb.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/wb.jpeg', import.meta.url).href
                     }else if(response.rows[i].mediaType == 3){
-                        response.rows[i].ico = require('../../../assets/images/dy.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/dy.jpeg', import.meta.url).href
                     }else if(response.rows[i].mediaType == 4){
-                        response.rows[i].ico = require('../../../assets/images/tt.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/tt.jpeg', import.meta.url).href
                     }else if(response.rows[i].mediaType == 5){
-                        response.rows[i].ico = require('../../../assets/images/ks.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/ks.jpeg', import.meta.url).href
                     }else if(response.rows[i].mediaType == 111){
-                        response.rows[i].ico = require('../../../assets/images/yd.png')
+                        response.rows[i].ico = new URL('../../../assets/images/yd.png', import.meta.url).href
                     }else if(response.rows[i].mediaType == 112){
-                        response.rows[i].ico = require('../../../assets/images/rm.png')
+                        response.rows[i].ico = new URL('../../../assets/images/rm.png', import.meta.url).href
                     }else if(response.rows[i].mediaType == 113){
-                        response.rows[i].ico = require('../../../assets/images/bj.png')
+                        response.rows[i].ico = new URL('../../../assets/images/bj.png', import.meta.url).href
                     }else if(response.rows[i].mediaType == 117){
-                        response.rows[i].ico = require('../../../assets/images/tx.png')
+                        response.rows[i].ico = new URL('../../../assets/images/tx.png', import.meta.url).href
                     }else if(response.rows[i].mediaType == 118){
-                        response.rows[i].ico = require('../../../assets/images/qe.png')
+                        response.rows[i].ico = new URL('../../../assets/images/qe.png', import.meta.url).href
                     }else if(response.rows[i].mediaType == 119){
-                        response.rows[i].ico = require('../../../assets/images/nf.png')
+                        response.rows[i].ico = new URL('../../../assets/images/nf.png', import.meta.url).href
                     }else if(response.rows[i].mediaType == 120){
-                        response.rows[i].ico = require('../../../assets/images/ydh.png')
+                        response.rows[i].ico = new URL('../../../assets/images/ydh.png', import.meta.url).href
                     }else if(response.rows[i].mediaType == 121){
-                        response.rows[i].ico = require('../../../assets/images/wy.png')
+                        response.rows[i].ico = new URL('../../../assets/images/wy.png', import.meta.url).href
                     }else if(response.rows[i].mediaType == 122){
-                        response.rows[i].ico = require('../../../assets/images/xcx.png')
+                        response.rows[i].ico = new URL('../../../assets/images/xcx.png', import.meta.url).href
                     }else if(response.rows[i].mediaType == 123){
-                        response.rows[i].ico = require('../../../assets/images/dy.png')
+                        response.rows[i].ico = new URL('../../../assets/images/dy.png', import.meta.url).href
                     }else if(response.rows[i].mediaType == 124){
-                        response.rows[i].ico = require('../../../assets/images/sh.png')
+                        response.rows[i].ico = new URL('../../../assets/images/sh.png', import.meta.url).href
                     }else if(response.rows[i].mediaType == 125){
-                        response.rows[i].ico = require('../../../assets/images/pp.png')
+                        response.rows[i].ico = new URL('../../../assets/images/pp.png', import.meta.url).href
                     }else {
-                        response.rows[i].ico = require('../../../assets/images/qt.png')
+                        response.rows[i].ico = new URL('../../../assets/images/qt.png', import.meta.url).href
                     }
 
                     if(response.rows[i].showState == 1){

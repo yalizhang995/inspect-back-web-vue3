@@ -385,41 +385,41 @@ export default {
                     }
                     // response.rows[i].appType = 4;
                     if(response.rows[i].appType == 1){
-                        response.rows[i].ico = require('../../../assets/images/wx.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/wx.jpeg', import.meta.url).href
                     }else if(response.rows[i].appType == 2){
-                        response.rows[i].ico = require('../../../assets/images/wb.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/wb.jpeg', import.meta.url).href
                     }else if(response.rows[i].appType == 3){
-                        response.rows[i].ico = require('../../../assets/images/dy.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/dy.jpeg', import.meta.url).href
                     }else if(response.rows[i].appType == 4){
-                        response.rows[i].ico = require('../../../assets/images/tt.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/tt.jpeg', import.meta.url).href
                     }else if(response.rows[i].appType == 5){
-                        response.rows[i].ico = require('../../../assets/images/ks.jpeg')
+                        response.rows[i].ico = new URL('../../../assets/images/ks.jpeg', import.meta.url).href
                     }else if(response.rows[i].appType == 111){
-                        response.rows[i].ico = require('../../../assets/images/yd.png')
+                        response.rows[i].ico = new URL('../../../assets/images/yd.png', import.meta.url).href
                     }else if(response.rows[i].appType == 112){
-                        response.rows[i].ico = require('../../../assets/images/rm.png')
+                        response.rows[i].ico = new URL('../../../assets/images/rm.png', import.meta.url).href
                     }else if(response.rows[i].appType == 113){
-                        response.rows[i].ico = require('../../../assets/images/bj.png')
+                        response.rows[i].ico = new URL('../../../assets/images/bj.png', import.meta.url).href
                     }else if(response.rows[i].appType == 117){
-                        response.rows[i].ico = require('../../../assets/images/tx.png')
+                        response.rows[i].ico = new URL('../../../assets/images/tx.png', import.meta.url).href
                     }else if(response.rows[i].appType == 118){
-                        response.rows[i].ico = require('../../../assets/images/qe.png')
+                        response.rows[i].ico = new URL('../../../assets/images/qe.png', import.meta.url).href
                     }else if(response.rows[i].appType == 119){
-                        response.rows[i].ico = require('../../../assets/images/nf.png')
+                        response.rows[i].ico = new URL('../../../assets/images/nf.png', import.meta.url).href
                     }else if(response.rows[i].appType == 120){
-                        response.rows[i].ico = require('../../../assets/images/ydh.png')
+                        response.rows[i].ico = new URL('../../../assets/images/ydh.png', import.meta.url).href
                     }else if(response.rows[i].appType == 121){
-                        response.rows[i].ico = require('../../../assets/images/wy.png')
+                        response.rows[i].ico = new URL('../../../assets/images/wy.png', import.meta.url).href
                     }else if(response.rows[i].appType == 122){
-                        response.rows[i].ico = require('../../../assets/images/xcx.png')
+                        response.rows[i].ico = new URL('../../../assets/images/xcx.png', import.meta.url).href
                     }else if(response.rows[i].appType == 123){
-                        response.rows[i].ico = require('../../../assets/images/dy.png')
+                        response.rows[i].ico = new URL('../../../assets/images/dy.png', import.meta.url).href
                     }else if(response.rows[i].appType == 124){
-                        response.rows[i].ico = require('../../../assets/images/sh.png')
+                        response.rows[i].ico = new URL('../../../assets/images/sh.png', import.meta.url).href
                     }else if(response.rows[i].appType == 125){
-                        response.rows[i].ico = require('../../../assets/images/pp.png')
+                        response.rows[i].ico = new URL('../../../assets/images/pp.png', import.meta.url).href
                     }else {
-                        response.rows[i].ico = require('../../../assets/images/qt.png')
+                        response.rows[i].ico = new URL('../../../assets/images/qt.png', import.meta.url).href
                     }
                 }
                 this.inspSiteInfoList = response.rows;

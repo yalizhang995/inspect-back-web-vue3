@@ -999,41 +999,41 @@ export default {
                         this.infoListObj.one = this.infoListObj.sentence.split(this.infoListObj.word)[0];
                         this.infoListObj.two = this.infoListObj.sentence.split(this.infoListObj.word)[1];
                         if(this.infoListObj.mediaType == 1){
-                            this.infoListObj.ico = require('../../../assets/images/wx.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/wx.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 2){
-                            this.infoListObj.ico = require('../../../assets/images/wb.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/wb.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 3){
-                            this.infoListObj.ico = require('../../../assets/images/dy.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/dy.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 4){
-                            this.infoListObj.ico = require('../../../assets/images/tt.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/tt.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 5){
-                            this.infoListObj.ico = require('../../../assets/images/ks.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/ks.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 111){
-                            this.infoListObj.ico = require('../../../assets/images/yd.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/yd.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 112){
-                            this.infoListObj.ico = require('../../../assets/images/rm.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/rm.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 113){
-                            this.infoListObj.ico = require('../../../assets/images/bj.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/bj.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 117){
-                            this.infoListObj.ico = require('../../../assets/images/tx.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/tx.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 118){
-                            this.infoListObj.ico = require('../../../assets/images/qe.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/qe.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 119){
-                            this.infoListObj.ico = require('../../../assets/images/nf.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/nf.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 120){
-                            this.infoListObj.ico = require('../../../assets/images/ydh.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/ydh.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 121){
-                            this.infoListObj.ico = require('../../../assets/images/wy.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/wy.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 122){
-                            this.infoListObj.ico = require('../../../assets/images/xcx.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/xcx.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 123){
-                            this.infoListObj.ico = require('../../../assets/images/dy.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/dy.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 124){
-                            this.infoListObj.ico = require('../../../assets/images/sh.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/sh.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 125){
-                            this.infoListObj.ico = require('../../../assets/images/pp.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/pp.png', import.meta.url).href
                         }else {
-                            this.infoListObj.ico = require('../../../assets/images/qt.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/qt.png', import.meta.url).href
                         }
                         // 所在文章
                         if(this.infoListObj.fromTitle == null || this.infoListObj.fromTitle == ''){
@@ -1089,41 +1089,41 @@ export default {
                             this.infoListObj.color = '#999999';
                         }
                         if(this.infoListObj.mediaType == 1){
-                            this.infoListObj.ico = require('../../../assets/images/wx.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/wx.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 2){
-                            this.infoListObj.ico = require('../../../assets/images/wb.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/wb.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 3){
-                            this.infoListObj.ico = require('../../../assets/images/dy.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/dy.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 4){
-                            this.infoListObj.ico = require('../../../assets/images/tt.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/tt.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 5){
-                            this.infoListObj.ico = require('../../../assets/images/ks.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/ks.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 111){
-                            this.infoListObj.ico = require('../../../assets/images/yd.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/yd.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 112){
-                            this.infoListObj.ico = require('../../../assets/images/rm.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/rm.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 113){
-                            this.infoListObj.ico = require('../../../assets/images/bj.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/bj.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 117){
-                            this.infoListObj.ico = require('../../../assets/images/tx.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/tx.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 118){
-                            this.infoListObj.ico = require('../../../assets/images/qe.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/qe.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 119){
-                            this.infoListObj.ico = require('../../../assets/images/nf.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/nf.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 120){
-                            this.infoListObj.ico = require('../../../assets/images/ydh.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/ydh.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 121){
-                            this.infoListObj.ico = require('../../../assets/images/wy.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/wy.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 122){
-                            this.infoListObj.ico = require('../../../assets/images/xcx.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/xcx.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 123){
-                            this.infoListObj.ico = require('../../../assets/images/dy.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/dy.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 124){
-                            this.infoListObj.ico = require('../../../assets/images/sh.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/sh.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 125){
-                            this.infoListObj.ico = require('../../../assets/images/pp.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/pp.png', import.meta.url).href
                         }else {
-                            this.infoListObj.ico = require('../../../assets/images/qt.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/qt.png', import.meta.url).href
                         }
                     })
                 }else if(this.form.problemType == 200){
@@ -1151,41 +1151,41 @@ export default {
                             this.infoListObj.overdueStateBgColor = '#48b93f';
                         }
                         if(this.infoListObj.mediaType == 1){
-                            this.infoListObj.ico = require('../../../assets/images/wx.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/wx.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 2){
-                            this.infoListObj.ico = require('../../../assets/images/wb.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/wb.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 3){
-                            this.infoListObj.ico = require('../../../assets/images/dy.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/dy.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 4){
-                            this.infoListObj.ico = require('../../../assets/images/tt.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/tt.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 5){
-                            this.infoListObj.ico = require('../../../assets/images/ks.jpeg')
+                            this.infoListObj.ico = new URL('../../../assets/images/ks.jpeg', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 111){
-                            this.infoListObj.ico = require('../../../assets/images/yd.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/yd.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 112){
-                            this.infoListObj.ico = require('../../../assets/images/rm.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/rm.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 113){
-                            this.infoListObj.ico = require('../../../assets/images/bj.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/bj.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 117){
-                            this.infoListObj.ico = require('../../../assets/images/tx.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/tx.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 118){
-                            this.infoListObj.ico = require('../../../assets/images/qe.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/qe.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 119){
-                            this.infoListObj.ico = require('../../../assets/images/nf.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/nf.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 120){
-                            this.infoListObj.ico = require('../../../assets/images/ydh.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/ydh.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 121){
-                            this.infoListObj.ico = require('../../../assets/images/wy.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/wy.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 122){
-                            this.infoListObj.ico = require('../../../assets/images/xcx.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/xcx.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 123){
-                            this.infoListObj.ico = require('../../../assets/images/dy.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/dy.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 124){
-                            this.infoListObj.ico = require('../../../assets/images/sh.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/sh.png', import.meta.url).href
                         }else if(this.infoListObj.mediaType == 125){
-                            this.infoListObj.ico = require('../../../assets/images/pp.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/pp.png', import.meta.url).href
                         }else {
-                            this.infoListObj.ico = require('../../../assets/images/qt.png')
+                            this.infoListObj.ico = new URL('../../../assets/images/qt.png', import.meta.url).href
                         }
                         if(!this.infoListObj.siteCode){
                             this.infoListObj.siteCode = '--';

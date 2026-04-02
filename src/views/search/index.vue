@@ -534,18 +534,18 @@ export default {
                 for(var i in this.tabDate){
                     if(this.tabDate[i].codeType == '新媒体'){
                         if(this.tabDate[i].appType == '微信'){
-                            this.tabDate[i].ico = require('../../assets/images/wx.jpeg');
+                            this.tabDate[i].ico = new URL('../../assets/images/wx.jpeg', import.meta.url).href;
                         }else if(this.tabDate[i].appType == '微博'){
-                            this.tabDate[i].ico = require('../../assets/images/wb.jpeg');
+                            this.tabDate[i].ico = new URL('../../assets/images/wb.jpeg', import.meta.url).href;
                         }else if(this.tabDate[i].appType == '抖音'){
-                            this.tabDate[i].ico = require('../../assets/images/dy.jpeg');
+                            this.tabDate[i].ico = new URL('../../assets/images/dy.jpeg', import.meta.url).href;
                         }else if(this.tabDate[i].appType == '头条'){
-                            this.tabDate[i].ico = require('../../assets/images/tt.jpeg');
+                            this.tabDate[i].ico = new URL('../../assets/images/tt.jpeg', import.meta.url).href;
                         }else if(this.tabDate[i].appType == '快手'){
-                            this.tabDate[i].ico = require('../../assets/images/ks.jpeg');
+                            this.tabDate[i].ico = new URL('../../assets/images/ks.jpeg', import.meta.url).href;
                         }
                     }else{
-                        this.tabDate[i].ico = require('../../assets/images/wzIco.png');
+                        this.tabDate[i].ico = new URL('../../assets/images/wzIco.png', import.meta.url).href;
                     }
                 }
                 setTimeout(()=>{
